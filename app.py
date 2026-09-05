@@ -3,20 +3,53 @@ from datetime import datetime, timedelta
 import urllib.parse
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_fully_customizable_secret'
+app.secret_key = 'south_pole_absolute_final_secret_key'
 
-# ब्रँड आणि लोगो सेटिंग (ॲडमिनवरून बदलता येईल)
+# ब्रँड, टॅगलाईन आणि लोगो सेटिंग (ॲडमिन पॅनेलमधून बदलता येईल)
 STORE_CONFIG = {
     "name": "South Pole Natural Kulfi",
     "tagline": "POS Counter & QR Menu with Photos",
     "logo": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150" # इथे तुमचा लोगो टाका
 }
 
+# दक्षिण पोल नॅचरल कुल्फीचे सर्व ३६ आयटम्स (फोटो लिंक्ससह)
 MENU_ITEMS = [
     {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"},
     {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
     {"id": 3, "name": "Paan Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"},
-    {"id": 4, "name": "Mango Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=150"}
+    {"id": 4, "name": "Mango Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=150"},
+    {"id": 5, "name": "Sitafal Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=150"},
+    {"id": 6, "name": "Special Mawa Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=150"},
+    {"id": 7, "name": "Malai Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=150"},
+    {"id": 8, "name": "Kesar Pistachio Kulfi", "price": 40, "category": "Special", "image": "https://images.unsplash.com/photo-1560008511-11c63416e52d?w=150"},
+    {"id": 9, "name": "Badam Pista Kulfi", "price": 40, "category": "Special", "image": "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?w=150"},
+    {"id": 10, "name": "Roasted Almond Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1549395156-e0c1fe6fc7a5?w=150"},
+    {"id": 11, "name": "Anjeer (Fig) Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1505394033641-40c6ad1178d7?w=150"},
+    {"id": 12, "name": "Black Currant Kulfi", "price": 40, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"},
+    {"id": 13, "name": "Butterscotch Kulfi", "price": 40, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=150"},
+    {"id": 14, "name": "American Nuts Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1582716401301-b2444cb73389?w=150"},
+    {"id": 15, "name": "Rajbhog Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"},
+    {"id": 16, "name": "Kulfi Falooda", "price": 60, "category": "Falooda", "image": "https://images.unsplash.com/photo-1553177598-f339f7271e98?w=150"},
+    {"id": 17, "name": "Royal Kulfi Falooda", "price": 80, "category": "Falooda", "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150"},
+    {"id": 18, "name": "Anjeer Ice Cream Scoop", "price": 85, "category": "Scoop", "image": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=150"},
+    {"id": 19, "name": "Mango Scoop", "price": 65, "category": "Scoop", "image": "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=150"},
+    {"id": 20, "name": "Sitafal Scoop", "price": 65, "category": "Scoop", "image": "https://images.unsplash.com/photo-1560008511-11c63416e52d?w=150"},
+    {"id": 21, "name": "Vanilla Scoop", "price": 50, "category": "Scoop", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=150"},
+    {"id": 22, "name": "Chocolate Scoop", "price": 55, "category": "Scoop", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
+    {"id": 23, "name": "Strawberry Scoop", "price": 55, "category": "Scoop", "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=150"},
+    {"id": 24, "name": "Butterscotch Scoop", "price": 60, "category": "Scoop", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"},
+    {"id": 25, "name": "Dry Fruits Shake", "price": 125, "category": "Shake", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=150"},
+    {"id": 26, "name": "Anjeer Shake", "price": 105, "category": "Shake", "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=150"},
+    {"id": 27, "name": "Mango Shake", "price": 95, "category": "Shake", "image": "https://images.unsplash.com/photo-1546173159-315724a31696?w=150"},
+    {"id": 28, "name": "Chocolate Shake", "price": 90, "category": "Shake", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=150"},
+    {"id": 29, "name": "Cold Coffee with Ice Cream", "price": 110, "category": "Shake", "image": "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=150"},
+    {"id": 30, "name": "Sitafal Shake", "price": 105, "category": "Shake", "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=150"},
+    {"id": 31, "name": "Kesar Milkshake", "price": 100, "category": "Shake", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=150"},
+    {"id": 32, "name": "Anjeer Mastani", "price": 145, "category": "Mastani", "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=150"},
+    {"id": 33, "name": "Mango Mastani", "price": 135, "category": "Mastani", "image": "https://images.unsplash.com/photo-1553177598-f339f7271e98?w=150"},
+    {"id": 34, "name": "Dry Fruit Mastani", "price": 160, "category": "Mastani", "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150"},
+    {"id": 35, "name": "Chocolate Blast Mastani", "price": 150, "category": "Mastani", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
+    {"id": 36, "name": "Special South Pole Sundae", "price": 180, "category": "Sundae", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"}
 ]
 
 STAFF_LIST = [
@@ -78,6 +111,11 @@ def place_order():
 💵 *दिलेले पैसे:* ₹{cash_given}
 🔄 *परत दिलेले पैसे:* ₹{return_change}
 
+---
+🌟 आमचे सोशल मीडिया पेज फॉलो करा:
+📸 Instagram: {SOCIAL_LINKS['instagram']}
+📘 Facebook: {SOCIAL_LINKS['facebook']}
+
 पुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
 
     encoded_msg = urllib.parse.quote(whatsapp_msg)
@@ -108,10 +146,37 @@ def admin_panel():
         return redirect(url_for('admin_login'))
     
     total_sales = sum(o['total'] for o in ORDERS)
+    total_orders = len(ORDERS)
+    
+    now = datetime.now()
+    daily_sales = 0
+    weekly_sales = 0
+    monthly_sales = 0
+    yearly_sales = 0
+    
+    for o in ORDERS:
+        try:
+            order_date = datetime.strptime(o['date'], "%Y-%m-%d %H:%M")
+            if order_date.date() == now.date():
+                daily_sales += o['total']
+            if order_date >= now - timedelta(days=7):
+                weekly_sales += o['total']
+            if order_date.month == now.month and order_date.year == now.year:
+                monthly_sales += o['total']
+            if order_date.year == now.year:
+                yearly_sales += o['total']
+        except:
+            pass
+
+    base_url = request.host_url
+    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
+
     return render_template('admin_panel.html', 
-                           orders=ORDERS, total_sales=total_sales, 
+                           orders=ORDERS, total_sales=total_sales, total_orders=total_orders,
+                           daily_sales=daily_sales, weekly_sales=weekly_sales,
+                           monthly_sales=monthly_sales, yearly_sales=yearly_sales,
                            menu=MENU_ITEMS, config=STORE_CONFIG, 
-                           loyalty_users=LOYALTY_DB)
+                           loyalty_users=LOYALTY_DB, qr_url=qr_api_url, store_url=base_url)
 
 @app.route('/admin/add_item', methods=['POST'])
 def admin_add_item():
@@ -169,7 +234,9 @@ def staff_login():
 @app.route('/staff')
 def staff_panel():
     if not session.get('staff_logged') and not session.get('admin_logged'): return redirect(url_for('staff_login'))
-    return render_template('staff_panel.html', orders=ORDERS, config=STORE_CONFIG)
+    base_url = request.host_url
+    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
+    return render_template('staff_panel.html', orders=ORDERS, config=STORE_CONFIG, qr_url=qr_api_url, store_url=base_url)
 
 @app.route('/staff/confirm/<int:order_id>')
 def staff_confirm_order(order_id):

@@ -3,46 +3,20 @@ from datetime import datetime, timedelta
 import urllib.parse
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_ultimate_secret_key'
+app.secret_key = 'south_pole_fully_customizable_secret'
 
-# दक्षिण पोल नॅचरल कुल्फीचे सर्व ३६ आयटम्स
+# ब्रँड आणि लोगो सेटिंग (ॲडमिनवरून बदलता येईल)
+STORE_CONFIG = {
+    "name": "South Pole Natural Kulfi",
+    "tagline": "POS Counter & QR Menu with Photos",
+    "logo": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150" # इथे तुमचा लोगो टाका
+}
+
 MENU_ITEMS = [
-    {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi"},
-    {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi"},
-    {"id": 3, "name": "Paan Kulfi", "price": 30, "category": "Kulfi"},
-    {"id": 4, "name": "Mango Kulfi", "price": 30, "category": "Kulfi"},
-    {"id": 5, "name": "Sitafal Kulfi", "price": 30, "category": "Kulfi"},
-    {"id": 6, "name": "Special Mawa Kulfi", "price": 45, "category": "Special"},
-    {"id": 7, "name": "Malai Kulfi", "price": 35, "category": "Kulfi"},
-    {"id": 8, "name": "Kesar Pistachio Kulfi", "price": 40, "category": "Special"},
-    {"id": 9, "name": "Badam Pista Kulfi", "price": 40, "category": "Special"},
-    {"id": 10, "name": "Roasted Almond Kulfi", "price": 45, "category": "Special"},
-    {"id": 11, "name": "Anjeer (Fig) Kulfi", "price": 45, "category": "Special"},
-    {"id": 12, "name": "Black Currant Kulfi", "price": 40, "category": "Kulfi"},
-    {"id": 13, "name": "Butterscotch Kulfi", "price": 40, "category": "Kulfi"},
-    {"id": 14, "name": "American Nuts Kulfi", "price": 45, "category": "Special"},
-    {"id": 15, "name": "Rajbhog Kulfi", "price": 45, "category": "Special"},
-    {"id": 16, "name": "Kulfi Falooda", "price": 60, "category": "Falooda"},
-    {"id": 17, "name": "Royal Kulfi Falooda", "price": 80, "category": "Falooda"},
-    {"id": 18, "name": "Anjeer Ice Cream Scoop", "price": 85, "category": "Scoop"},
-    {"id": 19, "name": "Mango Scoop", "price": 65, "category": "Scoop"},
-    {"id": 20, "name": "Sitafal Scoop", "price": 65, "category": "Scoop"},
-    {"id": 21, "name": "Vanilla Scoop", "price": 50, "category": "Scoop"},
-    {"id": 22, "name": "Chocolate Scoop", "price": 55, "category": "Scoop"},
-    {"id": 23, "name": "Strawberry Scoop", "price": 55, "category": "Scoop"},
-    {"id": 24, "name": "Butterscotch Scoop", "price": 60, "category": "Scoop"},
-    {"id": 25, "name": "Dry Fruits Shake", "price": 125, "category": "Shake"},
-    {"id": 26, "name": "Anjeer Shake", "price": 105, "category": "Shake"},
-    {"id": 27, "name": "Mango Shake", "price": 95, "category": "Shake"},
-    {"id": 28, "name": "Chocolate Shake", "price": 90, "category": "Shake"},
-    {"id": 29, "name": "Cold Coffee with Ice Cream", "price": 110, "category": "Shake"},
-    {"id": 30, "name": "Sitafal Shake", "price": 105, "category": "Shake"},
-    {"id": 31, "name": "Kesar Milkshake", "price": 100, "category": "Shake"},
-    {"id": 32, "name": "Anjeer Mastani", "price": 145, "category": "Mastani"},
-    {"id": 33, "name": "Mango Mastani", "price": 135, "category": "Mastani"},
-    {"id": 34, "name": "Dry Fruit Mastani", "price": 160, "category": "Mastani"},
-    {"id": 35, "name": "Chocolate Blast Mastani", "price": 150, "category": "Mastani"},
-    {"id": 36, "name": "Special South Pole Sundae", "price": 180, "category": "Sundae"}
+    {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"},
+    {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
+    {"id": 3, "name": "Paan Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=150"},
+    {"id": 4, "name": "Mango Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=150"}
 ]
 
 STAFF_LIST = [
@@ -62,7 +36,7 @@ SOCIAL_LINKS = {
 
 @app.route('/')
 def customer_portal():
-    return render_template('customer_menu.html', items=MENU_ITEMS, social=SOCIAL_LINKS)
+    return render_template('customer_menu.html', items=MENU_ITEMS, config=STORE_CONFIG, social=SOCIAL_LINKS)
 
 @app.route('/place_order', methods=['POST'])
 def place_order():
@@ -92,9 +66,9 @@ def place_order():
             LOYALTY_DB[phone] = {"name": name, "phone": phone, "dob": dob if dob else "N/A", "points": 1}
 
     order_id = len(ORDERS) + 1
-    
     items_text = "\n".join([f"- {i['name']} x {i['qty']} = ₹{i['total']}" for i in ordered_items])
-    whatsapp_msg = f"""🍦 *South Pole Natural Kulfi* 🍦
+    
+    whatsapp_msg = f"""🍦 *{STORE_CONFIG['name']}* 🍦
 नमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏
 
 🧾 *ऑर्डर बिल (Order ID: #{order_id})*
@@ -104,80 +78,25 @@ def place_order():
 💵 *दिलेले पैसे:* ₹{cash_given}
 🔄 *परत दिलेले पैसे:* ₹{return_change}
 
----
-🌟 आमचे सोशल मीडिया पेज फॉलो करा:
-📸 Instagram: {SOCIAL_LINKS['instagram']}
-📘 Facebook: {SOCIAL_LINKS['facebook']}
-▶️ YouTube: {SOCIAL_LINKS['youtube']}
-
-⭐ आम्हाला Google वर रिव्ह्यू द्या:
-{SOCIAL_LINKS['google_review']}
-
 पुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
 
     encoded_msg = urllib.parse.quote(whatsapp_msg)
     whatsapp_link = f"https://wa.me/91{phone}?text={encoded_msg}"
 
     order_data = {
-        "id": order_id,
-        "name": name,
-        "phone": phone,
-        "dob": dob,
-        "items": ordered_items,
-        "total": total_amount,
-        "cash_given": cash_given,
-        "return_change": return_change,
-        "status": "Pending",
-        "whatsapp_link": whatsapp_link,
-        "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+        "id": order_id, "name": name, "phone": phone, "dob": dob,
+        "items": ordered_items, "total": total_amount, "cash_given": cash_given,
+        "return_change": return_change, "status": "Pending",
+        "whatsapp_link": whatsapp_link, "date": datetime.now().strftime("%Y-%m-%d %H:%M")
     }
     ORDERS.append(order_data)
-    
-    return render_template('bill_success.html', order=order_data, social=SOCIAL_LINKS)
-
-@app.route('/staff/login', methods=['GET', 'POST'])
-def staff_login():
-    error = None
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        for s in STAFF_LIST:
-            if s['username'] == username and s['password'] == password:
-                session['staff_logged'] = True
-                return redirect(url_for('staff_panel'))
-        error = "चुकीचा युजरनेम किंवा पासवर्ड!"
-    return render_template('staff_login.html', error=error)
-
-@app.route('/staff/confirm/<int:order_id>')
-def staff_confirm_order(order_id):
-    if not session.get('staff_logged') and not session.get('admin_logged'):
-        return redirect(url_for('staff_login'))
-    for o in ORDERS:
-        if o['id'] == order_id:
-            o['status'] = 'Confirmed'
-            return redirect(url_for('staff_panel'))
-    return redirect(url_for('staff_panel'))
-
-@app.route('/staff')
-def staff_panel():
-    if not session.get('staff_logged') and not session.get('admin_logged'):
-        return redirect(url_for('staff_login'))
-    base_url = request.host_url
-    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
-    return render_template('staff_panel.html', orders=ORDERS, staff=STAFF_LIST, qr_url=qr_api_url, store_url=base_url)
-
-@app.route('/staff/logout')
-def staff_logout():
-    session.pop('staff_logged', None)
-    session.pop('admin_logged', None)
-    return redirect(url_for('staff_login'))
+    return render_template('bill_success.html', order=order_data, config=STORE_CONFIG, social=SOCIAL_LINKS)
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     error = None
     if request.method == 'POST':
-        password = request.form.get('password')
-        if password == ADMIN_PASSWORD:
+        if request.form.get('password') == ADMIN_PASSWORD:
             session['admin_logged'] = True
             return redirect(url_for('admin_panel'))
         error = "चुकीचा ॲडमिन पासवर्ड!"
@@ -189,67 +108,42 @@ def admin_panel():
         return redirect(url_for('admin_login'))
     
     total_sales = sum(o['total'] for o in ORDERS)
-    total_orders = len(ORDERS)
-    
-    now = datetime.now()
-    daily_sales = 0
-    weekly_sales = 0
-    monthly_sales = 0
-    yearly_sales = 0
-    
-    for o in ORDERS:
-        try:
-            order_date = datetime.strptime(o['date'], "%Y-%m-%d %H:%M")
-            if order_date.date() == now.date():
-                daily_sales += o['total']
-            if order_date >= now - timedelta(days=7):
-                weekly_sales += o['total']
-            if order_date.month == now.month and order_date.year == now.year:
-                monthly_sales += o['total']
-            if order_date.year == now.year:
-                yearly_sales += o['total']
-        except:
-            pass
-
-    base_url = request.host_url
-    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
-    
     return render_template('admin_panel.html', 
-                           orders=ORDERS, 
-                           total_sales=total_sales, 
-                           total_orders=total_orders, 
-                           daily_sales=daily_sales,
-                           weekly_sales=weekly_sales,
-                           monthly_sales=monthly_sales,
-                           yearly_sales=yearly_sales,
-                           menu=MENU_ITEMS, 
-                           staff=STAFF_LIST, 
-                           loyalty_users=LOYALTY_DB, 
-                           social=SOCIAL_LINKS, 
-                           qr_url=qr_api_url, 
-                           store_url=base_url)
+                           orders=ORDERS, total_sales=total_sales, 
+                           menu=MENU_ITEMS, config=STORE_CONFIG, 
+                           loyalty_users=LOYALTY_DB)
+
+@app.route('/admin/add_item', methods=['POST'])
+def admin_add_item():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    new_id = max([i['id'] for i in MENU_ITEMS], default=0) + 1
+    name = request.form.get('name')
+    price = float(request.form.get('price', 0))
+    category = request.form.get('category')
+    image = request.form.get('image') or "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
+    
+    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category, "image": image})
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_item/<int:item_id>')
+def admin_delete_item(item_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    global MENU_ITEMS
+    MENU_ITEMS = [i for i in MENU_ITEMS if i['id'] != item_id]
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/update_config', methods=['POST'])
+def admin_update_config():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    STORE_CONFIG['name'] = request.form.get('store_name')
+    STORE_CONFIG['tagline'] = request.form.get('tagline')
+    STORE_CONFIG['logo'] = request.form.get('logo_url')
+    return redirect(url_for('admin_panel'))
 
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin_logged', None)
     return redirect(url_for('admin_login'))
-
-@app.route('/admin/add_menu', methods=['POST'])
-def add_menu():
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    name = request.form.get('name')
-    price = float(request.form.get('price', 0))
-    category = request.form.get('category', 'General')
-    new_id = len(MENU_ITEMS) + 1
-    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category})
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/delete_menu/<int:item_id>')
-def delete_menu(item_id):
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    global MENU_ITEMS
-    MENU_ITEMS = [item for item in MENU_ITEMS if item['id'] != item_id]
-    return redirect(url_for('admin_panel'))
 
 @app.route('/loyalty', methods=['GET', 'POST'])
 def check_loyalty():
@@ -257,11 +151,36 @@ def check_loyalty():
     message = None
     if request.method == 'POST':
         phone = request.form.get('phone')
-        if phone in LOYALTY_DB:
-            user_data = LOYALTY_DB[phone]
-        else:
-            message = "हा नंबर लॉयल्टी प्रोग्राममध्ये सापडला नाही."
-    return render_template('check_loyalty.html', user_data=user_data, message=message)
+        if phone in LOYALTY_DB: user_data = LOYALTY_DB[phone]
+        else: message = "हा नंबर लॉयल्टी प्रोग्राममध्ये सापडला नाही."
+    return render_template('check_loyalty.html', user_data=user_data, message=message, config=STORE_CONFIG)
+
+@app.route('/staff/login', methods=['GET', 'POST'])
+def staff_login():
+    error = None
+    if request.method == 'POST':
+        for s in STAFF_LIST:
+            if s['username'] == request.form.get('username') and s['password'] == request.form.get('password'):
+                session['staff_logged'] = True
+                return redirect(url_for('staff_panel'))
+        error = "चुकीचा युजरनेम किंवा पासवर्ड!"
+    return render_template('staff_login.html', error=error)
+
+@app.route('/staff')
+def staff_panel():
+    if not session.get('staff_logged') and not session.get('admin_logged'): return redirect(url_for('staff_login'))
+    return render_template('staff_panel.html', orders=ORDERS, config=STORE_CONFIG)
+
+@app.route('/staff/confirm/<int:order_id>')
+def staff_confirm_order(order_id):
+    for o in ORDERS:
+        if o['id'] == order_id: o['status'] = 'Confirmed'
+    return redirect(url_for('staff_panel'))
+
+@app.route('/staff/logout')
+def staff_logout():
+    session.pop('staff_logged', None)
+    return redirect(url_for('staff_login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

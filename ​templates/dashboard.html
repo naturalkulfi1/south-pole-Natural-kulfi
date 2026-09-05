@@ -3,46 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>अॅडमिन डॅशबोर्ड</title>
+    <title>Admin Dashboard - South Pole Natural Kulfi</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-amber-50">
-    <div class="max-w-4xl mx-auto p-4">
-        <div class="flex justify-between items-center my-6 bg-white p-4 rounded-xl shadow-md">
-            <h1 class="text-2xl font-extrabold text-amber-900">📊 डॅशबोर्ड - South Pole Kulfi</h1>
-            <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600 transition">लॉगआउट</a>
+<body class="bg-amber-50 p-4">
+    <div class="max-w-xl mx-auto space-y-6">
+        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-amber-200">
+            <h1 class="text-xl font-extrabold text-amber-900">📊 ॲडमिन डॅशबोर्ड</h1>
+            <a href="/order" class="bg-amber-100 text-amber-800 px-3 py-1.5 rounded-lg text-sm font-semibold hover:bg-amber-200">मेनू</a>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-            <h2 class="text-xl font-bold text-amber-900 mb-4">🛒 प्राप्त झालेल्या ऑर्डर्स (Bills)</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-amber-100 text-amber-900">
-                            <th class="p-3 border">नाव</th>
-                            <th class="p-3 border">नंबर</th>
-                            <th class="p-3 border">कुल्फी</th>
-                            <th class="p-3 border">रक्कम</th>
-                            <th class="p-3 border">स्टेटस</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for bill in bills %}
-                        <tr class="border-b">
-                            <td class="p-3 border">{{ bill.customer_name }}</td>
-                            <td class="p-3 border">{{ bill.customer_phone }}</td>
-                            <td class="p-3 border">{{ bill.items_summary }}</td>
-                            <td class="p-3 border">₹{{ bill.total_amount }}</td>
-                            <td class="p-3 border text-amber-600 font-bold">{{ bill.status }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="bg-white rounded-xl shadow border border-amber-200 overflow-hidden">
+            <div class="p-4 border-b bg-amber-50 font-bold text-gray-800">सर्व ऑर्डरची यादी</div>
+            <div class="divide-y">
+                {% if orders %}
+                    {% for order in orders %}
+                    <div class="p-4 space-y-1">
+                        <div class="flex justify-between font-bold text-gray-800">
+                            <span>{{ order.name }}</span>
+                            <span class="text-amber-600">₹{{ order.price }}</span>
+                        </div>
+                        <div class="text-xs text-gray-500 flex justify-between">
+                            <span>📞 {{ order.phone }}</span>
+                            <span>🍦 {{ order.item_name }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-6 text-center text-gray-500 text-sm">कोणतीही ऑर्डर नाही.</div>
+                {% endif %}
             </div>
-        </div>
-
-        <div class="text-center mt-6">
-            <a href="/order" class="text-amber-700 font-semibold underline">← ग्राहक मेनू पहा</a>
         </div>
     </div>
 </body>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - South Pole Kulfi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 p-4 pb-20">
+    <div class="max-w-md mx-auto space-y-4">
+        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-amber-200">
+            <h1 class="text-lg font-extrabold text-amber-900">⚙️ ॲडमिन कंट्रोल पॅनल</h1>
+            <a href="/order" class="bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">मेनू</a>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-3">
+            <h2 class="font-bold text-gray-800 border-b pb-2 text-sm">➕ नवीन कुल्फी जोडा</h2>
+            <form method="POST" class="space-y-2.5">
+                <input type="hidden" name="action" value="add_item">
+                <input type="text" name="name" placeholder="कुल्फीचे नाव" required class="w-full p-2 border rounded text-sm outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" name="price" placeholder="किंमत (₹)" required class="w-full p-2 border rounded text-sm outline-none">
+                    <input type="text" name="category" placeholder="कॅटेगरी (Classic)" required class="w-full p-2 border rounded text-sm outline-none">
+                </div>
+                <input type="url" name="image" placeholder="फोटो लिंक (Image URL)" required class="w-full p-2 border rounded text-sm outline-none">
+                <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded shadow text-sm">कुल्फी जोडा</button>
+            </form>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-3">
+            <h2 class="font-bold text-gray-800 border-b pb-2 text-sm">🏷️ नवीन ऑफर जोडा</h2>
+            <form method="POST" class="space-y-2.5">
+                <input type="hidden" name="action" value="add_offer">
+                <input type="text" name="title" placeholder="ऑफर शीर्षक" required class="w-full p-2 border rounded text-sm outline-none">
+                <input type="text" name="desc" placeholder="वर्णन" required class="w-full p-2 border rounded text-sm outline-none">
+                <input type="text" name="type" placeholder="प्रकार (Daily/Weekly/Monthly)" required class="w-full p-2 border rounded text-sm outline-none">
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded shadow text-sm">ऑफर पब्लिश करा</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -4,17 +4,44 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'south_pole_secret_key'
 
-# ३६+ कुल्फी आणि प्रॉडक्ट्सचा मेनू (Petpooja Style POS Menu)
+# दक्षिण पोल नॅचरल कुल्फीचे सर्व ३६ आयटम्स
 MENU_ITEMS = [
-    {"id": 1, "name": "Jamun / Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100"},
-    {"id": 2, "name": "Paan / Mango / Sitafal Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100"},
-    {"id": 3, "name": "Special Mawa Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=100"},
-    {"id": 4, "name": "Anjeer Ice Cream Scoop", "price": 85, "category": "Scoop", "image": "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=100"},
-    {"id": 5, "name": "Mango / Sitafal Scoop", "price": 65, "category": "Scoop", "image": "https://images.unsplash.com/photo-1560008511-11c63416e52d?w=100"},
-    {"id": 6, "name": "Dry Fruits Shake", "price": 125, "category": "Shake", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=100"},
-    {"id": 7, "name": "Anjeer Shake", "price": 105, "category": "Shake", "image": "https://images.unsplash.com/photo-1553787499-3f9d37c9d3f4?w=100"},
-    {"id": 8, "name": "Anjeer Mastani", "price": 145, "category": "Mastani", "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100"},
-    # इथे तुम्ही ॲडमिन पॅनलमधून किंवा थेट ३६ आयटम्स जोडू शकता
+    {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi"},
+    {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi"},
+    {"id": 3, "name": "Paan Kulfi", "price": 30, "category": "Kulfi"},
+    {"id": 4, "name": "Mango Kulfi", "price": 30, "category": "Kulfi"},
+    {"id": 5, "name": "Sitafal Kulfi", "price": 30, "category": "Kulfi"},
+    {"id": 6, "name": "Special Mawa Kulfi", "price": 45, "category": "Special"},
+    {"id": 7, "name": "Malai Kulfi", "price": 35, "category": "Kulfi"},
+    {"id": 8, "name": "Kesar Pistachio Kulfi", "price": 40, "category": "Special"},
+    {"id": 9, "name": "Badam Pista Kulfi", "price": 40, "category": "Special"},
+    {"id": 10, "name": "Roasted Almond Kulfi", "price": 45, "category": "Special"},
+    {"id": 11, "name": "Anjeer (Fig) Kulfi", "price": 45, "category": "Special"},
+    {"id": 12, "name": "Black Currant Kulfi", "price": 40, "category": "Kulfi"},
+    {"id": 13, "name": "Butterscotch Kulfi", "price": 40, "category": "Kulfi"},
+    {"id": 14, "name": "American Nuts Kulfi", "price": 45, "category": "Special"},
+    {"id": 15, "name": "Rajbhog Kulfi", "price": 45, "category": "Special"},
+    {"id": 16, "name": "Kulfi Falooda", "price": 60, "category": "Falooda"},
+    {"id": 17, "name": "Royal Kulfi Falooda", "price": 80, "category": "Falooda"},
+    {"id": 18, "name": "Anjeer Ice Cream Scoop", "price": 85, "category": "Scoop"},
+    {"id": 19, "name": "Mango Scoop", "price": 65, "category": "Scoop"},
+    {"id": 20, "name": "Sitafal Scoop", "price": 65, "category": "Scoop"},
+    {"id": 21, "name": "Vanilla Scoop", "price": 50, "category": "Scoop"},
+    {"id": 22, "name": "Chocolate Scoop", "price": 55, "category": "Scoop"},
+    {"id": 23, "name": "Strawberry Scoop", "price": 55, "category": "Scoop"},
+    {"id": 24, "name": "Butterscotch Scoop", "price": 60, "category": "Scoop"},
+    {"id": 25, "name": "Dry Fruits Shake", "price": 125, "category": "Shake"},
+    {"id": 26, "name": "Anjeer Shake", "price": 105, "category": "Shake"},
+    {"id": 27, "name": "Mango Shake", "price": 95, "category": "Shake"},
+    {"id": 28, "name": "Chocolate Shake", "price": 90, "category": "Shake"},
+    {"id": 29, "name": "Cold Coffee with Ice Cream", "price": 110, "category": "Shake"},
+    {"id": 30, "name": "Sitafal Shake", "price": 105, "category": "Shake"},
+    {"id": 31, "name": "Kesar Milkshake", "price": 100, "category": "Shake"},
+    {"id": 32, "name": "Anjeer Mastani", "price": 145, "category": "Mastani"},
+    {"id": 33, "name": "Mango Mastani", "price": 135, "category": "Mastani"},
+    {"id": 34, "name": "Dry Fruit Mastani", "price": 160, "category": "Mastani"},
+    {"id": 35, "name": "Chocolate Blast Mastani", "price": 150, "category": "Mastani"},
+    {"id": 36, "name": "Special South Pole Sundae", "price": 180, "category": "Sundae"}
 ]
 
 STAFF_LIST = [
@@ -40,6 +67,7 @@ def customer_portal():
 def place_order():
     name = request.form.get('customer_name')
     phone = request.form.get('phone')
+    dob = request.form.get('dob') # जन्म तारीख
     cash_given = float(request.form.get('cash_given', 0) or 0)
     
     ordered_items = []
@@ -58,14 +86,16 @@ def place_order():
         if phone in LOYALTY_DB:
             LOYALTY_DB[phone]['points'] += 1
             if name: LOYALTY_DB[phone]['name'] = name
+            if dob: LOYALTY_DB[phone]['dob'] = dob
         else:
-            LOYALTY_DB[phone] = {"name": name, "phone": phone, "points": 1}
+            LOYALTY_DB[phone] = {"name": name, "phone": phone, "dob": dob if dob else "N/A", "points": 1}
 
     order_id = len(ORDERS) + 1
     order_data = {
         "id": order_id,
         "name": name,
         "phone": phone,
+        "dob": dob,
         "items": ordered_items,
         "total": total_amount,
         "cash_given": cash_given,
@@ -123,42 +153,6 @@ def admin_panel():
 def admin_logout():
     session.pop('admin_logged', None)
     return redirect(url_for('admin_login'))
-
-@app.route('/admin/add_menu', methods=['POST'])
-def add_menu():
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    name = request.form.get('name')
-    price = float(request.form.get('price', 0))
-    category = request.form.get('category', 'General')
-    image = request.form.get('image', 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100')
-    new_id = len(MENU_ITEMS) + 1
-    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category, "image": image})
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/delete_menu/<int:item_id>')
-def delete_menu(item_id):
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    global MENU_ITEMS
-    MENU_ITEMS = [item for item in MENU_ITEMS if item['id'] != item_id]
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/add_staff', methods=['POST'])
-def add_staff():
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    name = request.form.get('staff_name')
-    username = request.form.get('staff_username')
-    password = request.form.get('staff_password')
-    phone = request.form.get('staff_phone')
-    new_id = len(STAFF_LIST) + 1
-    STAFF_LIST.append({"id": new_id, "username": username, "password": password, "name": name, "phone": phone})
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/delete_staff/<int:staff_id>')
-def delete_staff(staff_id):
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    global STAFF_LIST
-    STAFF_LIST = [s for s in STAFF_LIST if s['id'] != staff_id]
-    return redirect(url_for('admin_panel'))
 
 @app.route('/loyalty', methods=['GET', 'POST'])
 def check_loyalty():

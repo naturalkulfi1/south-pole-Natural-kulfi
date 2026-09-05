@@ -1,27 +1,15 @@
 <!DOCTYPE html>
 <html lang="mr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success - South Pole</title>
-    <style>
-        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 15px; text-align: center; }
-        .card { background: white; max-width: 400px; margin: 20px auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #27ae60; margin-top: 0; }
-        .whatsapp-btn { background: #25D366; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: block; font-weight: bold; margin: 15px 0; }
-        .home-btn { background: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 12px; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h2>🎉 ऑर्डर यशस्वीरीत्या नोंदवली!</h2>
-        <p>ऑर्डर आयडी: <b>#{{ order.id }}</b></p>
-        <p>ग्राहक: <b>{{ order.name }}</b></p>
-        <p>एकूण रक्कम: <b>₹{{ order.total }}</b></p>
-        <p>परत द्यायचे पैसे (Change): <b style="color: #c0392b;">₹{{ order.return_change }}</b></p>
-
-        <a href="{{ order.whatsapp_link }}" target="_blank" class="whatsapp-btn">📲 ग्राहकाला WhatsApp वर बिल पाठवा</a>
-        <a href="/" class="home-btn">➕ नवीन ऑर्डर घ्या</a>
+<head><meta charset="UTF-8"><title>Order Success</title></head>
+<body style="font-family:sans-serif; background:#eef2f3; padding:15px; text-align:center;">
+    <div style="background:white; max-width:350px; margin:auto; padding:15px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        <h2 style="color:#004d40; margin-top:0;">✅ ऑर्डर यशस्वीरीत्या झाली!</h2>
+        <p style="font-size:13px;">ऑर्डर ID: <b>#{{ order.id }}</b></p>
+        <p style="font-size:13px;">ग्राहक: <b>{{ order.name }}</b></p>
+        <h3 style="color:#006064;">एकूण: ₹{{ order.total }}</h3>
+        <p style="font-size:12px;">परत द्यायची चिल्लर: <b>₹{{ order.return_change }}</b></p>
+        <a href="{{ order.whatsapp_link }}" target="_blank" style="display:block; background:#25d366; color:white; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:10px;">व्हॉट्सॲपवर बिल पाठवा 📱</a>
+        <a href="/" style="display:block; background:#004d40; color:white; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold; margin-top:6px;">नवीन ऑर्डर घ्या ⚡</a>
     </div>
 </body>
 </html>

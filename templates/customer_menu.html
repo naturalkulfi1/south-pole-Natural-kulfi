@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>South Pole Natural Kulfi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 pb-28">
+    <div class="max-w-md mx-auto p-4 space-y-4">
+        <div class="text-center my-3">
+            <h1 class="text-3xl font-extrabold text-amber-900">❄️ South Pole Natural Kulfi</h1>
+            <p class="text-gray-600 text-sm mt-1">स्कॅन करा, फोटो बघून कुल्फी निवडा!</p>
+        </div>
+
+        {% if offers %}
+        <div class="bg-amber-600 text-white p-4 rounded-xl shadow-md text-center">
+            {% for offer in offers %}
+            <span class="bg-amber-800 text-[10px] px-2 py-0.5 rounded-full uppercase font-bold">{{ offer.type }} Offer</span>
+            <h3 class="font-bold text-base mt-1">{{ offer.title }}</h3>
+            <p class="text-xs text-amber-100">{{ offer.desc }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-2 gap-2">
+            <a href="/check-loyalty" class="bg-white p-3 rounded-xl shadow text-center text-amber-800 font-bold text-xs border border-amber-200">🎁 लॉयल्टी पॉईंट्स</a>
+            <a href="/staff-panel" class="bg-white p-3 rounded-xl shadow text-center text-amber-800 font-bold text-xs border border-amber-200">👨‍🍳 किचन स्टाफ पॅनल</a>
+        </div>
+
+        <form action="/place-order" method="POST" class="space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow-md space-y-3 border border-amber-200">
+                <h2 class="text-sm font-bold text-gray-800 border-b pb-2">१. तुमची माहिती भरा</h2>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">पूर्ण नाव</label>
+                    <input type="text" name="name" placeholder="उदा. राहुल पाटील" required class="w-full p-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">मोबाईल नंबर (WhatsApp)</label>
+                    <input type="tel" name="phone" placeholder="10 अंकी नंबर" required class="w-full p-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">जन्मतारीख</label>
+                    <input type="date" name="dob" required class="w-full p-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+            </div>
+
+            <h2 class="text-lg font-bold text-amber-900 mt-4">आमच्या स्पेशल कुल्फी</h2>
+            <div class="grid grid-cols-1 gap-3">
+                {% for item in items %}
+                <div class="bg-white rounded-xl shadow-sm p-3 border border-amber-100 flex items-center space-x-3">
+                    <img src="{{ item.image }}" alt="{{ item.name }}" class="w-20 h-20 object-cover rounded-lg border">
+                    <div class="flex-1">
+                        <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold">{{ item.category }}</span>
+                        <h3 class="font-bold text-sm text-gray-800 mt-1">{{ item.name }}</h3>
+                        <p class="text-amber-600 font-bold text-sm">₹{{ item.price }}</p>
+                    </div>
+                    <div>
+                        <label class="cursor-pointer bg-amber-50 border border-amber-300 px-3 py-1.5 rounded-lg text-amber-800 font-semibold text-xs hover:bg-amber-100 inline-block">
+                            <input type="radio" name="item_id" value="{{ item.id }}" required class="mr-1 accent-amber-600"> निवडा
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-amber-200 p-4 shadow-lg max-w-md mx-auto z-50">
+                <button type="submit" class="w-full bg-amber-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-amber-700 transition flex items-center justify-center space-x-2 text-base">
+                    <span>ऑर्डर कन्फर्म करा & बिल बनवा</span>
+                    <span>🚀</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

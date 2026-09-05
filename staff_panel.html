@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Staff Panel - South Pole Kulfi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 p-4">
+    <div class="max-w-xl mx-auto space-y-4">
+        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-amber-200">
+            <h1 class="text-lg font-extrabold text-amber-900">👨‍🍳 किचन स्टाफ पॅनल (PetPooja)</h1>
+            <a href="/order" class="bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">मेनू</a>
+        </div>
+        <div class="space-y-3">
+            {% if orders %}
+                {% for order in orders %}
+                <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-2">
+                    <div class="flex justify-between font-bold text-gray-800 border-b pb-2 text-sm">
+                        <span>ऑर्डर #{{ order.id }} - {{ order.name }}</span>
+                        <span class="text-amber-600">₹{{ order.price }}</span>
+                    </div>
+                    <p class="text-sm font-semibold text-gray-700">🍦 कुल्फी: {{ order.item_name }}</p>
+                    <p class="text-xs text-gray-500">📞 मोबाईल: {{ order.phone }}</p>
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold">{{ order.status }}</span>
+                        <div class="space-x-1">
+                            <a href="/update-order-status/{{ order.id }}/Preparing" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">तयार होतेय</a>
+                            <a href="/update-order-status/{{ order.id }}/Ready" class="text-xs bg-green-500 text-white px-2 py-1 rounded">तयार आहे ✓</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-500 text-center py-6 text-sm">सध्या कोणतीही ऑर्डर नाही.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

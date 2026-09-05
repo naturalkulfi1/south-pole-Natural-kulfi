@@ -6,7 +6,7 @@
     <title>Bill Success</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; background: #e0f7fa; color: #004d40; }
-        .success-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        .success-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; border: 1px solid #b2ebf2; }
         h1 { color: #00796b; font-size: 20px; }
         .bill-details { text-align: left; background: #f4fdff; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 13px; line-height: 1.5; border: 1px solid #b2ebf2; }
         .whatsapp-btn { display: block; margin-top: 12px; padding: 12px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
@@ -33,12 +33,10 @@
             <b style="color: #c0392b; font-size: 15px;">परत द्यायचे पैसे (Change): ₹{{ order.return_change }}</b>
         </div>
 
-        <!-- WhatsApp वर बिल पाठवणे -->
         <a href="https://wa.me/91{{ order.phone }}?text=Hello%20{{ order.name }},%20Thank%20you%20for%20visiting%20South%20Pole%20Natural%20Kulfi!%20Your%20Bill%20Amount:%20Rs.%20{{ order.total }}.%20Visit%20again!" target="_blank" class="whatsapp-btn">
             💬 WhatsApp वर बिल पाठवा
         </a>
 
-        <!-- Google Review Link -->
         <a href="{{ social.google_review }}" target="_blank" class="review-btn">
             ⭐ आमचे गुगल रिव्ह्यू द्या (Google Review)
         </a>

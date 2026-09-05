@@ -3,76 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - South Pole Kulfi</title>
+    <title>Admin Panel - South Pole POS</title>
     <style>
-        body { font-family: sans-serif; background: #e0f7fa; padding: 15px; color: #004d40; }
-        h2 { color: #006064; text-align: center; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
-        .logout-btn { display: inline-block; float: right; background: #e74c3c; color: white; padding: 6px 12px; border-radius: 5px; text-decoration: none; font-size: 12px; font-weight: bold; }
-        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; background: #00838f; color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; }
-        .form-group { margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 8px; border: 1px solid #b2ebf2; border-radius: 5px; box-sizing: border-box; }
-        .btn { background: #006064; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; }
-        .delete-btn { background: #e74c3c; color: white; text-decoration: none; padding: 3px 8px; border-radius: 4px; font-size: 11px; }
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
+        .header { background: #004d40; color: white; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 16px; }
+        .logout-btn { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; }
+        .card { background: white; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 10px; }
+        .card h3 { margin-top: 0; color: #004d40; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 5px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+        th { background: #004d40; color: white; }
+        .qr-box { text-align: center; background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px dashed #004d40; margin-bottom: 10px; }
+        .qr-box img { width: 140px; height: 140px; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <a href="/admin/logout" class="logout-btn">लॉग आउट</a>
-    <a href="/" class="back-btn">⬅️ मुख्य पानावर जा</a>
-    <h2>🔒 ॲडमिन डॅशबोर्ड (South Pole Kulfi)</h2>
 
+    <div class="header">
+        <h1>🔒 ॲडमिन डॅशबोर्ड (South Pole POS)</h1>
+        <a href="/admin/logout" class="logout-btn">लॉग आउट</a>
+    </div>
+
+    <!-- QR Code Display -->
+    <div class="card">
+        <h3>📱 ग्राहक ऑर्डरसाठी QR कोड (Scan & Order)</h3>
+        <div class="qr-box">
+            <img src="{{ qr_url }}" alt="QR Code">
+            <p style="font-size: 11px; margin: 5px 0 0 0;">हा QR कोड स्कॅन करून ग्राहक थेट मेनूवर जाऊ शकतात.<br><b>URL:</b> {{ store_url }}</p>
+        </div>
+    </div>
+
+    <!-- Sales Summary Report -->
     <div class="card">
         <h3>📊 व्यावसायिक अहवाल (Sales Summary)</h3>
         <p>एकूण ऑर्डर्स: <b>{{ total_orders }}</b></p>
-        <p>एकूण विक्री (Total Revenue): <b style="color: #27ae60;">₹{{ total_sales }}</b></p>
+        <hr style="border: 0; border-top: 1px dashed #ddd; margin: 8px 0;">
+        <p>📅 आजची विक्री (Daily Income): <b style="color: #2980b9;">₹{{ daily_sales }}</b></p>
+        <p>📆 या आठवड्याची विक्री (Weekly Income): <b style="color: #8e44ad;">₹{{ weekly_sales }}</b></p>
+        <p>🗓️ या महिन्याची विक्री (Monthly Income): <b style="color: #d35400;">₹{{ monthly_sales }}</b></p>
+        <p>📈 या वर्षाची विक्री (Yearly Income): <b style="color: #2c3e50;">₹{{ yearly_sales }}</b></p>
+        <p>💰 सर्वकालीन एकूण विक्री (All-Time Revenue): <b style="color: #27ae60;">₹{{ total_sales }}</b></p>
     </div>
 
+    <!-- Orders List -->
     <div class="card">
-        <h3>🍨 मेनू मॅनेजमेंट (Add/Delete Kulfi)</h3>
-        <form action="/admin/add_menu" method="POST">
-            <div class="form-group"><input type="text" name="name" placeholder="कुल्फीचे नाव" required></div>
-            <div class="form-group"><input type="number" name="price" placeholder="किंमत (₹)" required></div>
-            <div class="form-group"><input type="text" name="image" placeholder="फोटो URL (Image Link)" required></div>
-            <button type="submit" class="btn">नवीन कुल्फी ॲड करा</button>
-        </form>
-        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
-        <h4>सध्याचा मेनू:</h4>
-        <ul>
-            {% for item in menu %}
-            <li style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <span>{{ item.name }} - ₹{{ item.price }}</span>
-                <a href="/admin/delete_menu/{{ item.id }}" class="delete-btn">डिलीट</a>
-            </li>
+        <h3>📋 सर्व ऑर्डर्स</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>नाव</th>
+                <th>मोबाईल & DOB</th>
+                <th>एकूण ₹</th>
+                <th>स्टेटस</th>
+            </tr>
+            {% for o in orders | reverse %}
+            <tr>
+                <td>#{{ o.id }}</td>
+                <td><b>{{ o.name }}</b></td>
+                <td>{{ o.phone }}<br><small>DOB: {{ o.dob }}</small></td>
+                <td><b>₹{{ o.total }}</b></td>
+                <td>{{ o.status }}</td>
+            </tr>
             {% endfor %}
-        </ul>
+        </table>
     </div>
 
-    <div class="card">
-        <h3>👥 स्टाफ मॅनेजमेंट (Staff Control)</h3>
-        <form action="/admin/add_staff" method="POST">
-            <div class="form-group"><input type="text" name="staff_name" placeholder="स्टाफचे पूर्ण नाव" required></div>
-            <div class="form-group"><input type="text" name="staff_username" placeholder="युजरनेम (उदा. rohan)" required></div>
-            <div class="form-group"><input type="password" name="staff_password" placeholder="पासवर्ड" required></div>
-            <div class="form-group"><input type="tel" name="staff_phone" placeholder="मोबाईल नंबर" required></div>
-            <button type="submit" class="btn" style="background-color: #00838f;">नवीन स्टाफ जोडा</button>
-        </form>
-        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
-        <h4>सध्याची स्टाफ यादी:</h4>
-        <ul>
-            {% for s in staff %}
-            <li style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <span><b>{{ s.name }}</b> (युजरनेम: {{ s.username }})</span>
-                <a href="/admin/delete_staff/{{ s.id }}" class="delete-btn">डिलीट</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="card">
-        <h3>📢 आगामी ऑफर्स व्हॉट्सॲपवर पाठवा (WhatsApp Broadcast)</h3>
-        <a href="https://wa.me/?text=Hello%20from%20South%20Pole%20Natural%20Kulfi!%20Exciting%20new%20flavours%20are%20live%20now.%20Visit%20today!" target="_blank" class="btn" style="background-color: #25D366; text-align: center; text-decoration: none; display: block; padding: 10px;">
-            💬 WhatsApp ऑफर मेसेज पाठवा
-        </a>
-    </div>
 </body>
 </html>

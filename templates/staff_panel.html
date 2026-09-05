@@ -3,38 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Staff Panel - South Pole Kulfi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Staff Login - South Pole Kulfi</title>
+    <style>
+        body { font-family: sans-serif; background: #e0f7fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; border: 1px solid #b2ebf2; }
+        h2 { color: #006064; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #004d40; margin-bottom: 4px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 10px; background: #00838f; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .error { color: #e74c3c; font-size: 12px; text-align: center; margin-bottom: 10px; font-weight: bold; }
+        .back-link { display: block; text-align: center; margin-top: 12px; color: #00838f; text-decoration: none; font-size: 12px; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-amber-50 p-4">
-    <div class="max-w-xl mx-auto space-y-4">
-        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-amber-200">
-            <h1 class="text-lg font-extrabold text-amber-900">👨‍🍳 किचन स्टाफ पॅनल (PetPooja)</h1>
-            <a href="/order" class="bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">मेनू</a>
-        </div>
-        <div class="space-y-3">
-            {% if orders %}
-                {% for order in orders %}
-                <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-2">
-                    <div class="flex justify-between font-bold text-gray-800 border-b pb-2 text-sm">
-                        <span>ऑर्डर #{{ order.id }} - {{ order.name }}</span>
-                        <span class="text-amber-600">₹{{ order.price }}</span>
-                    </div>
-                    <p class="text-sm font-semibold text-gray-700">🍦 कुल्फी: {{ order.item_name }}</p>
-                    <p class="text-xs text-gray-500">📞 मोबाईल: {{ order.phone }}</p>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-bold">{{ order.status }}</span>
-                        <div class="space-x-1">
-                            <a href="/update-order-status/{{ order.id }}/Preparing" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">तयार होतेय</a>
-                            <a href="/update-order-status/{{ order.id }}/Ready" class="text-xs bg-green-500 text-white px-2 py-1 rounded">तयार आहे ✓</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-gray-500 text-center py-6 text-sm">सध्या कोणतीही ऑर्डर नाही.</p>
-            {% endif %}
-        </div>
+<body>
+    <div class="login-box">
+        <h2>👨‍🍳 स्टाफ लॉगिन</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <label>युजरनेम (उदा. staff1)</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>पासवर्ड (उदा. 123)</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">लॉगिन करा</button>
+        </form>
+        <a href="/" class="back-link">⬅️ मुख्य मेनूवर जा</a>
     </div>
 </body>
 </html>

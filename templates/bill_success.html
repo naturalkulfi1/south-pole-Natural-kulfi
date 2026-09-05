@@ -3,40 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success - South Pole Kulfi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Order Success</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px 20px; background: #fdfaf6; }
+        .success-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #27ae60; }
+        .btn { display: inline-block; margin-top: 20px; padding: 12px 20px; background: #e67e22; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-amber-50 p-4">
-    <div class="max-w-md mx-auto min-h-screen flex flex-col justify-center space-y-4">
-        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border border-amber-200 space-y-4">
-            <div class="text-4xl">🎉</div>
-            <h1 class="text-xl font-extrabold text-amber-900">ऑर्डर यशस्वी झाली!</h1>
-            <p class="text-gray-600 text-xs">स्टेटस: {{ order.status }}</p>
-            
-            <div class="bg-amber-50 p-3 rounded-xl text-left space-y-1.5 border border-amber-100 text-xs">
-                <div class="flex justify-between"><span class="text-gray-600">ग्राहकाचे नाव:</span><span class="font-bold text-gray-800">{{ order.name }}</span></div>
-                <div class="flex justify-between"><span class="text-gray-600">मोबाईल:</span><span class="font-bold text-gray-800">{{ order.phone }}</span></div>
-                <div class="flex justify-between"><span class="text-gray-600">कुल्फी:</span><span class="font-bold text-gray-800">{{ order.item_name }}</span></div>
-                <div class="flex justify-between border-t pt-1.5 font-bold"><span class="text-gray-600">रक्कम:</span><span class="text-amber-700">₹{{ order.price }}</span></div>
-            </div>
-
-            <div class="bg-amber-100 p-2.5 rounded-xl text-amber-900 font-semibold text-xs">
-                ⭐ जमा झालेले लॉयल्टी पॉईंट्स: {{ order.points }}
-            </div>
-
-            <div class="space-y-2 pt-1">
-                <a href="{{ social.whatsapp_business }}" target="_blank" class="block w-full bg-green-600 text-white font-bold py-2.5 rounded-xl shadow hover:bg-green-700 text-xs">
-                    💬 WhatsApp वर संपर्क / बिल पाठवा
-                </a>
-                <a href="{{ social.google_review }}" target="_blank" class="block w-full bg-blue-600 text-white font-bold py-2.5 rounded-xl shadow hover:bg-blue-700 text-xs">
-                    ⭐ Google वर रिव्ह्यू द्या
-                </a>
-            </div>
-
-            <a href="/order" class="block w-full bg-amber-600 text-white font-bold py-2.5 rounded-xl shadow hover:bg-amber-700 text-xs mt-2">
-                पुन्हा ऑर्डर करा 🍦
-            </a>
-        </div>
+<body>
+    <div class="success-box">
+        <h1>✅ ऑर्डर यशस्वी!</h1>
+        <p>तुमची ऑर्डर किचन स्टाफकडे पाठवली आहे.</p>
+        <h3>ऑर्डर नंबर: #{{ order_id }}</h3>
+        <a href="/" class="btn">नवीन ऑर्डर करा</a>
     </div>
 </body>
 </html>

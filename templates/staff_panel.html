@@ -1,52 +1,32 @@
 <!DOCTYPE html>
 <html lang="mr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Panel - South Pole</title>
-    <style>
-        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
-        .header { background: #004d40; color: white; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .logout { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; }
-        .card { background: white; padding: 10px; border-radius: 6px; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 5px; }
-        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
-        th { background: #004d40; color: white; }
-        .btn-confirm { background: #27ae60; color: white; padding: 4px 8px; border-radius: 3px; text-decoration: none; font-size: 10px; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1 style="margin:0; font-size: 15px;">👨‍🍳 स्टाफ डॅशबोर्ड</h1>
-        <a href="/staff/logout" class="logout">लॉग आउट</a>
+<head><meta charset="UTF-8"><title>Staff Panel</title></head>
+<body style="font-family:sans-serif; background:#eef2f3; padding:10px;">
+    <div style="background:#004d40; color:white; padding:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="margin:0; font-size:15px;">👨‍🍳 स्टाफ डॅशबोर्ड (ऑर्डर लिस्ट)</h2>
+        <a href="/staff/logout" style="color:white; font-size:12px; text-decoration:none;">लॉग आउट</a>
     </div>
-
-    <div class="card">
-        <h3>📋 नवीन ऑर्डर्स</h3>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>ग्राहक</th>
-                <th>रक्कम</th>
-                <th>स्टेटस</th>
-                <th>कृती</th>
-            </tr>
-            {% for o in orders | reverse %}
+    <div style="background:white; padding:10px; border-radius:6px; margin-top:10px;">
+        <h3>सध्याच्या ऑर्डर</h3>
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+            <tr><th>ID</th><th>नाव</th><th>एकूण ₹</th><th>स्टेटस</th><th>कृती</th></tr>
+            {% for o in orders %}
             <tr>
                 <td>#{{ o.id }}</td>
-                <td><b>{{ o.name }}</b><br>{{ o.phone }}</td>
-                <td><b>₹{{ o.total }}</b></td>
+                <td>{{ o.name }}</td>
+                <td>₹{{ o.total }}</td>
                 <td>{{ o.status }}</td>
                 <td>
                     {% if o.status == 'Pending' %}
-                    <a href="/staff/confirm/{{ o.id }}" class="btn-confirm">कन्फर्म करा</a>
+                    <a href="/staff/confirm/{{ o.id }}" style="background:green; color:white; padding:3px 6px; text-decoration:none; border-radius:3px;">कन्फर्म करा</a>
                     {% else %}
-                    ✅ झाली
+                    पूर्ण झाली
                     {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </table>
+        <p style="margin-top:10px;"><a href="/" style="font-size:12px; color:#004d40; text-decoration:none; font-weight:bold;">← मुख्य POS पेज</a></p>
     </div>
 </body>
 </html>

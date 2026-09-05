@@ -14,10 +14,11 @@
         .top-nav { display: flex; gap: 5px; margin-bottom: 8px; overflow-x: auto; }
         .nav-link { background: white; border: 1px solid #004d40; color: #004d40; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; white-space: nowrap; }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 280px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 300px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
         .menu-card { background: #fff; border: 1px solid #b2ebf2; border-radius: 5px; padding: 6px; text-align: center; cursor: pointer; user-select: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
+        .menu-card:active { background: #e0f7fa; transform: scale(0.97); }
         .menu-card img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; margin-bottom: 4px; border: 1px solid #004d40; }
-        .menu-card h4 { margin: 2px 0; font-size: 11px; color: #006064; }
+        .menu-card h4 { margin: 2px 0; font-size: 11px; color: #006064; line-height: 1.2; }
         .menu-card p { margin: 0; font-size: 11px; color: #00838f; font-weight: bold; }
 
         .section-box { background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; font-size: 12px; }
@@ -46,11 +47,11 @@
         <a href="/" class="nav-link" style="background:#004d40; color:white;">⚡ POS बिलिंग</a>
         <a href="/loyalty" class="nav-link">🎁 लॉयल्टी</a>
         <a href="/staff/login" class="nav-link">👨‍🍳 स्टाफ</a>
-        <a href="/admin/login" class="nav-link">🔒 ॲडमिन कस्टमायझेशन</a>
+        <a href="/admin/login" class="nav-link">🔒 ॲडमिन पॅनेल</a>
     </div>
 
     <form action="/place_order" method="POST">
-        <div style="font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px;">मेनू आयटम्स (Tap to Add):</div>
+        <div style="font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px;">सर्व ३६ आयटम्स (Tap to Add):</div>
         <div class="menu-grid">
             {% for item in items %}
             <div class="menu-card" onclick="incrementItem({{ item.id }}, '{{ item.name }}', {{ item.price }})">
@@ -77,7 +78,7 @@
             <div class="cart-list" id="cartList"><span style="color:#777; font-size:11px;">काहीही निवडलेले नाही.</span></div>
             <div class="total-box"><span>एकूण: ₹ <span id="grandTotal">0</span></span></div>
         </div>
-        <button type="submit" class="submit-btn">ऑर्डर कन्फर्म करा 🚀</button>
+        <button type="submit" class="submit-btn">ऑर्डर कन्फर्म करा & बिल बनवा 🚀</button>
     </form>
 
     <script>

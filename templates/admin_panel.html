@@ -3,36 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Panel - South Pole Kulfi</title>
     <style>
-        body { font-family: sans-serif; background: #fdfaf6; padding: 15px; color: #5c3a21; }
-        h2 { color: #d35400; text-align: center; }
-        .card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; background: #e67e22; color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; }
+        body { font-family: sans-serif; background: #e0f7fa; padding: 15px; color: #004d40; }
+        h2 { color: #006064; text-align: center; }
+        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
+        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; background: #00838f; color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; }
+        .form-group { margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #b2ebf2; border-radius: 5px; box-sizing: border-box; }
+        .btn { background: #006064; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; }
+        .delete-btn { background: #e74c3c; color: white; text-decoration: none; padding: 3px 8px; border-radius: 4px; font-size: 11px; }
     </style>
 </head>
 <body>
     <a href="/" class="back-btn">⬅️ मुख्य पानावर जा</a>
-    <h2>🔒 मालक डॅशबोर्ड & रिपोर्ट्स (Admin Panel)</h2>
+    <h2>🔒 ॲडमिन डॅशबोर्ड (South Pole Kulfi)</h2>
 
+    <!-- सेल्स समरी -->
     <div class="card">
         <h3>📊 व्यावसायिक अहवाल (Sales Summary)</h3>
         <p>एकूण ऑर्डर्स: <b>{{ total_orders }}</b></p>
         <p>एकूण विक्री (Total Revenue): <b style="color: #27ae60;">₹{{ total_sales }}</b></p>
     </div>
 
+    <!-- मेनू मॅनेजमेंट (Add/Delete/Update) -->
     <div class="card">
-        <h3>📋 सर्व ऑर्डर्सची यादी</h3>
-        {% if orders %}
-            {% for o in orders %}
-            <div style="border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 8px;">
-                <b>#{{ o.id }} - {{ o.name }}</b> ({{ o.phone }})<br>
-                <span>रक्कम: ₹{{ o.total }} | वेळ: {{ o.date }}</span>
-            </div>
+        <h3>🍨 मेनू मॅनेजमेंट (Add/Delete Kulfi)</h3>
+        <form action="/admin/add_menu" method="POST">
+            <div class="form-group"><input type="text" name="name" placeholder="कुल्फीचे नाव" required></div>
+            <div class="form-group"><input type="number" name="price" placeholder="किंमत (₹)" required></div>
+            <div class="form-group"><input type="text" name="image" placeholder="फोटो URL (Image Link)" required></div>
+            <button type="submit" class="btn">नवीन कुल्फी ॲड करा</button>
+        </form>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <h4>सध्याचा मेनू:</h4>
+        <ul>
+            {% for item in menu %}
+            <li style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span>{{ item.name }} - ₹{{ item.price }}</span>
+                <a href="/admin/delete_menu/{{ item.id }}" class="delete-btn">डिलीट</a>
+            </li>
             {% endfor %}
-        {% else %}
-            <p>कोणतीही ऑर्डर नाही.</p>
-        {% endif %}
+        </ul>
     </div>
+
+    <!-- स्टाफ मॅनेजमेंट (Add/Delete Staff) -->
+    <div class="card">
+        <h3>👥 स्टाफ मॅनेजमेंट (Staff Control)</h3>
+        <form action="/admin/add_staff" method="POST">
+            <div class="form-group"><input type="text" name="staff_name" placeholder="स्टाफचे नाव" required></div>
+            <div class="form-group"><input type="tel" name="staff_phone" placeholder="मोबाईल नंबर" required></div>
+            <button type="submit" class="btn" style="background-color: #00838f;">नवीन स्टाफ जोडा</button>
+        </form>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <h4>स्टाफ यादी:</h4>
+        <ul>
+            {% for s in staff %}
+            <li style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <span>{{ s.name }} ({{ s.phone }})</span>
+                <a href="/admin/delete_staff/{{ s.id }}" class="delete-btn">डिलीट</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- व्हॉट्सॲप ऑफर्स ब्रॉडकास्ट सिम्युलेटर -->
+    <div class="card">
+        <h3>📢 आगामी ऑफर्स व्हॉट्सॲपवर पाठवा (WhatsApp Broadcast)</h3>
+        <p style="font-size: 12px; color: #555;">सर्व लॉयल्टी युजर्सना एका क्लिकवर ऑफर मेसेज पाठवा:</p>
+        <a href="https://wa.me/?text=Hello%20from%20South%20Pole%20Natural%20Kulfi!%20Exciting%20new%20flavours%20are%20live%20now.%20Visit%20today!" target="_blank" class="btn" style="background-color: #25D366; text-align: center; text-decoration: none; display: block; padding: 10px;">
+            💬 WhatsApp ऑफर मेसेज पाठवा
+        </a>
+    </div>
+
 </body>
 </html>

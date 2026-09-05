@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - South Pole Kulfi</title>
+    <style>
+        body { font-family: sans-serif; background: #e0f7fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; border: 1px solid #b2ebf2; }
+        h2 { color: #006064; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #004d40; margin-bottom: 4px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 10px; background: #006064; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .error { color: #e74c3c; font-size: 12px; text-align: center; margin-bottom: 10px; font-weight: bold; }
+        .back-link { display: block; text-align: center; margin-top: 12px; color: #00838f; text-decoration: none; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>🔒 ॲडमिन लॉगिन</h2>
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <label>पासवर्ड टाका (डीफॉल्ट: admin123)</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">लॉगिन करा</button>
+        </form>
+        <a href="/" class="back-link">⬅️ मुख्य मेनूवर जा</a>
+    </div>
+</body>
+</html>

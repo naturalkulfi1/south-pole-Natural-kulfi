@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_secret_key'  # सेशन मॅनेजमेंटसाठी आवश्यक
+app.secret_key = 'south_pole_secret_key'
 
 # डायनॅमिक मेनू डेटा
 MENU_ITEMS = [
@@ -10,16 +10,14 @@ MENU_ITEMS = [
     {"id": 2, "name": "मँगो कुल्फी", "price": 45, "image": "https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100"}
 ]
 
-# स्टाफ डेटाबेस (युजरनेम आणि पासवर्डसह)
+# स्टाफ डेटाबेस
 STAFF_LIST = [
     {"id": 1, "username": "staff1", "password": "123", "name": "रोहन (कौंटर)", "phone": "9876543210"}
 ]
 
-# ॲडमिन पासवर्ड
 ADMIN_PASSWORD = "admin123"
-
 ORDERS = []
-LOYALTY_DB = {}  # 1 Visit = 1 Point
+LOYALTY_DB = {}
 
 SOCIAL_LINKS = {
     "instagram": "https://instagram.com/southpolenaturalkulfi",
@@ -80,7 +78,7 @@ def place_order():
     
     return render_template('bill_success.html', order=order_data, social=SOCIAL_LINKS)
 
-# --- स्टाफ लॉगिन आणि पॅनल ---
+# स्टाफ लॉगिन व पॅनल
 @app.route('/staff/login', methods=['GET', 'POST'])
 def staff_login():
     error = None
@@ -105,7 +103,7 @@ def staff_logout():
     session.pop('staff_logged', None)
     return redirect(url_for('staff_login'))
 
-# --- ॲडमिन लॉगिन आणि पॅनल ---
+# ॲडमिन लॉगिन व पॅनल
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     error = None
@@ -130,7 +128,6 @@ def admin_logout():
     session.pop('admin_logged', None)
     return redirect(url_for('admin_login'))
 
-# ॲडमिन: मेनू ॲड/डिलिट
 @app.route('/admin/add_menu', methods=['POST'])
 def add_menu():
     if not session.get('admin_logged'): return redirect(url_for('admin_login'))
@@ -148,7 +145,6 @@ def delete_menu(item_id):
     MENU_ITEMS = [item for item in MENU_ITEMS if item['id'] != item_id]
     return redirect(url_for('admin_panel'))
 
-# ॲडमिन: स्टाफ ॲड/डिलिट
 @app.route('/admin/add_staff', methods=['POST'])
 def add_staff():
     if not session.get('admin_logged'): return redirect(url_for('admin_login'))

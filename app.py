@@ -1,29 +1,31 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = 'south_pole_secret_key'  # सेशन मॅनेजमेंटसाठी आवश्यक
 
-# डायनॅमिक मेनू डेटा (ॲडमिन येथून बदल करू शकतो)
+# डायनॅमिक मेनू डेटा
 MENU_ITEMS = [
     {"id": 1, "name": "सीताफळ कुल्फी", "price": 40, "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100"},
     {"id": 2, "name": "मँगो कुल्फी", "price": 45, "image": "https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100"}
 ]
 
-# स्टाफ मॅनेजमेंट डेटाबेस
+# स्टाफ डेटाबेस (युजरनेम आणि पासवर्डसह)
 STAFF_LIST = [
-    {"id": 1, "name": "रोहन (कौंटर)", "phone": "9876543210"},
-    {"id": 2, "name": "अमित (किचन)", "phone": "9123456789"}
+    {"id": 1, "username": "staff1", "password": "123", "name": "रोहन (कौंटर)", "phone": "9876543210"}
 ]
 
-ORDERS = []
-LOYALTY_DB = {}  # 1 Visit = 1 Bill = 1 Point
+# ॲडमिन पासवर्ड
+ADMIN_PASSWORD = "admin123"
 
-# सोशल मीडिया आणि गुगल रिव्ह्यू लिंक्स
+ORDERS = []
+LOYALTY_DB = {}  # 1 Visit = 1 Point
+
 SOCIAL_LINKS = {
     "instagram": "https://instagram.com/southpolenaturalkulfi",
     "facebook": "https://facebook.com/southpolenaturalkulfi",
     "youtube": "https://youtube.com/@southpolenaturalkulfi",
-    "google_review": "https://g.page/r/your-google-review-link" # इथे तुमची गुगल रिव्ह्यू लिंक टाका
+    "google_review": "https://g.page/r/your-google-review-link"
 }
 
 @app.route('/')
@@ -40,7 +42,6 @@ def place_order():
     ordered_items = []
     total_amount = 0
     
-    # डायनॅमिक मेनू नुसार क्वांटिट्टी मोजणे
     for item in MENU_ITEMS:
         qty = int(request.form.get(f'item_{item["id"]}', 0) or 0)
         if qty > 0:
@@ -50,7 +51,6 @@ def place_order():
 
     return_change = cash_given - total_amount if cash_given >= total_amount else 0
 
-    # लॉयल्टी पॉईंट्स: 1 Visit = 1 Point
     if phone and total_amount > 0:
         if phone in LOYALTY_DB:
             LOYALTY_DB[phone]['points'] += 1
@@ -80,19 +80,60 @@ def place_order():
     
     return render_template('bill_success.html', order=order_data, social=SOCIAL_LINKS)
 
+# --- स्टाफ लॉगिन आणि पॅनल ---
+@app.route('/staff/login', methods=['GET', 'POST'])
+def staff_login():
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        for s in STAFF_LIST:
+            if s['username'] == username and s['password'] == password:
+                session['staff_logged'] = True
+                return redirect(url_for('staff_panel'))
+        error = "चुकीचा युजरनेम किंवा पासवर्ड!"
+    return render_template('staff_login.html', error=error)
+
 @app.route('/staff')
 def staff_panel():
+    if not session.get('staff_logged'):
+        return redirect(url_for('staff_login'))
     return render_template('staff_panel.html', orders=ORDERS, staff=STAFF_LIST)
+
+@app.route('/staff/logout')
+def staff_logout():
+    session.pop('staff_logged', None)
+    return redirect(url_for('staff_login'))
+
+# --- ॲडमिन लॉगिन आणि पॅनल ---
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    error = None
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == ADMIN_PASSWORD:
+            session['admin_logged'] = True
+            return redirect(url_for('admin_panel'))
+        error = "चुकीचा ॲडमिन पासवर्ड!"
+    return render_template('admin_login.html', error=error)
 
 @app.route('/admin')
 def admin_panel():
+    if not session.get('admin_logged'):
+        return redirect(url_for('admin_login'))
     total_sales = sum(o['total'] for o in ORDERS)
     total_orders = len(ORDERS)
     return render_template('admin_panel.html', orders=ORDERS, total_sales=total_sales, total_orders=total_orders, menu=MENU_ITEMS, staff=STAFF_LIST, loyalty_users=LOYALTY_DB, social=SOCIAL_LINKS)
 
-# ॲडमिन: नवीन कुल्फी मेनू जोडणे
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_logged', None)
+    return redirect(url_for('admin_login'))
+
+# ॲडमिन: मेनू ॲड/डिलिट
 @app.route('/admin/add_menu', methods=['POST'])
 def add_menu():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
     name = request.form.get('name')
     price = float(request.form.get('price', 0))
     image = request.form.get('image')
@@ -100,25 +141,28 @@ def add_menu():
     MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "image": image})
     return redirect(url_for('admin_panel'))
 
-# ॲडमिन: कुल्फी मेनू डिलीट करणे
 @app.route('/admin/delete_menu/<int:item_id>')
 def delete_menu(item_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
     global MENU_ITEMS
     MENU_ITEMS = [item for item in MENU_ITEMS if item['id'] != item_id]
     return redirect(url_for('admin_panel'))
 
-# ॲडमिन: नवीन स्टाफ जोडणे
+# ॲडमिन: स्टाफ ॲड/डिलिट
 @app.route('/admin/add_staff', methods=['POST'])
 def add_staff():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
     name = request.form.get('staff_name')
+    username = request.form.get('staff_username')
+    password = request.form.get('staff_password')
     phone = request.form.get('staff_phone')
     new_id = len(STAFF_LIST) + 1
-    STAFF_LIST.append({"id": new_id, "name": name, "phone": phone})
+    STAFF_LIST.append({"id": new_id, "username": username, "password": password, "name": name, "phone": phone})
     return redirect(url_for('admin_panel'))
 
-# ॲडमिन: स्टाफ डिलीट करणे
 @app.route('/admin/delete_staff/<int:staff_id>')
 def delete_staff(staff_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
     global STAFF_LIST
     STAFF_LIST = [s for s in STAFF_LIST if s['id'] != staff_id]
     return redirect(url_for('admin_panel'))

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
+import urllib.parse
 
 app = Flask(__name__)
 app.secret_key = 'south_pole_secret_key'
@@ -67,7 +68,7 @@ def customer_portal():
 def place_order():
     name = request.form.get('customer_name')
     phone = request.form.get('phone')
-    dob = request.form.get('dob') # जन्म तारीख
+    dob = request.form.get('dob')
     cash_given = float(request.form.get('cash_given', 0) or 0)
     
     ordered_items = []
@@ -91,6 +92,33 @@ def place_order():
             LOYALTY_DB[phone] = {"name": name, "phone": phone, "dob": dob if dob else "N/A", "points": 1}
 
     order_id = len(ORDERS) + 1
+    
+    # WhatsApp message formatting with bill + social links + review link
+    items_text = "\n".join([f"- {i['name']} x {i['qty']} = ₹{i['total']}" for i in ordered_items])
+    whatsapp_msg = f"""🍦 *South Pole Natural Kulfi* 🍦
+नमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏
+
+🧾 *ऑर्डर बिल (Order ID: #{order_id})*
+{items_text}
+
+💰 *एकूण रक्कम:* ₹{total_amount}
+💵 *दिलेले पैसे:* ₹{cash_given}
+🔄 *परत दिलेले पैसे:* ₹{return_change}
+
+---
+🌟 आमचे सोशल मीडिया पेज फॉलो करा:
+📸 Instagram: {SOCIAL_LINKS['instagram']}
+📘 Facebook: {SOCIAL_LINKS['facebook']}
+▶️ YouTube: {SOCIAL_LINKS['youtube']}
+
+⭐ आम्हाला Google वर रिव्ह्यू द्या:
+{SOCIAL_LINKS['google_review']}
+
+पुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
+
+    encoded_msg = urllib.parse.quote(whatsapp_msg)
+    whatsapp_link = f"https://wa.me/91{phone}?text={encoded_msg}"
+
     order_data = {
         "id": order_id,
         "name": name,
@@ -100,6 +128,8 @@ def place_order():
         "total": total_amount,
         "cash_given": cash_given,
         "return_change": return_change,
+        "status": "Pending",
+        "whatsapp_link": whatsapp_link,
         "date": datetime.now().strftime("%Y-%m-%d %H:%M")
     }
     ORDERS.append(order_data)
@@ -119,15 +149,28 @@ def staff_login():
         error = "चुकीचा युजरनेम किंवा पासवर्ड!"
     return render_template('staff_login.html', error=error)
 
+@app.route('/staff/confirm/<int:order_id>')
+def staff_confirm_order(order_id):
+    if not session.get('staff_logged') and not session.get('admin_logged'):
+        return redirect(url_for('staff_login'))
+    for o in ORDERS:
+        if o['id'] == order_id:
+            o['status'] = 'Confirmed'
+            return redirect(url_for('staff_panel'))
+    return redirect(url_for('staff_panel'))
+
 @app.route('/staff')
 def staff_panel():
-    if not session.get('staff_logged'):
+    if not session.get('staff_logged') and not session.get('admin_logged'):
         return redirect(url_for('staff_login'))
-    return render_template('staff_panel.html', orders=ORDERS, staff=STAFF_LIST)
+    base_url = request.host_url
+    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
+    return render_template('staff_panel.html', orders=ORDERS, staff=STAFF_LIST, qr_url=qr_api_url, store_url=base_url)
 
 @app.route('/staff/logout')
 def staff_logout():
     session.pop('staff_logged', None)
+    session.pop('admin_logged', None)
     return redirect(url_for('staff_login'))
 
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -147,7 +190,9 @@ def admin_panel():
         return redirect(url_for('admin_login'))
     total_sales = sum(o['total'] for o in ORDERS)
     total_orders = len(ORDERS)
-    return render_template('admin_panel.html', orders=ORDERS, total_sales=total_sales, total_orders=total_orders, menu=MENU_ITEMS, staff=STAFF_LIST, loyalty_users=LOYALTY_DB, social=SOCIAL_LINKS)
+    base_url = request.host_url
+    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
+    return render_template('admin_panel.html', orders=ORDERS, total_sales=total_sales, total_orders=total_orders, menu=MENU_ITEMS, staff=STAFF_LIST, loyalty_users=LOYALTY_DB, social=SOCIAL_LINKS, qr_url=qr_api_url, store_url=base_url)
 
 @app.route('/admin/logout')
 def admin_logout():

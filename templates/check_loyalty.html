@@ -3,25 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Loyalty - South Pole Kulfi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Loyalty Club - South Pole Kulfi</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0f7fa; padding: 15px; color: #004d40; }
+        .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); max-width: 400px; margin: 20px auto; border: 1px solid #b2ebf2; }
+        h2 { color: #006064; text-align: center; margin-top: 0; font-size: 20px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 13px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; background: #f4fdff; }
+        .btn { width: 100%; padding: 12px; background: #00838f; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .back-btn { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #006064; font-size: 13px; font-weight: bold; }
+        .result-box { background: #f4fdff; border: 1px dashed #00838f; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; }
+        .alert { color: #c0392b; font-size: 13px; text-align: center; margin-bottom: 10px; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-amber-50">
-    <div class="max-w-md mx-auto p-4 min-h-screen flex flex-col justify-center">
-        <div class="bg-white p-6 rounded-2xl shadow-xl border border-amber-200 space-y-4 text-center">
-            <h1 class="text-xl font-extrabold text-amber-900">🎁 लॉयल्टी पॉईंट्स तपासा</h1>
-            <form method="POST" class="space-y-3">
-                <input type="tel" name="phone" placeholder="10 अंकी मोबाईल नंबर" required class="w-full p-3 border rounded-lg text-sm outline-none">
-                <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2.5 rounded-lg shadow text-sm">पॉईंट्स बघा</button>
-            </form>
-            {% if phone %}
-            <div class="bg-amber-50 p-3 rounded-lg border text-xs">
-                <p class="text-gray-500">नंबर: {{ phone }}</p>
-                <p class="text-lg font-bold text-amber-900 mt-1">पॉईंट्स: {{ points }} ⭐</p>
+<body>
+
+    <div class="box">
+        <h2>🎁 साऊथ पोल लॉयल्टी क्लब</h2>
+        <p style="text-align: center; font-size: 12px; color: #006064;">प्रत्येक भेटीवर १ पॉईंट मिळवा!</p>
+
+        {% if message %}
+        <div class="alert">{{ message }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <input type="hidden" name="action" value="check">
+            <div class="form-group">
+                <label>मोबाईल नंबर टाका</label>
+                <input type="tel" name="phone" placeholder="10 अंकी नंबर" pattern="[0-9]{10}" required>
             </div>
-            {% endif %}
-            <a href="/order" class="block text-amber-700 text-xs font-semibold hover:underline mt-2">← मुख्य मेनू कडे जा</a>
+            <button type="submit" class="btn" style="background-color: #006064;">पॉईंट्स तपासा</button>
+        </form>
+
+        {% if user_data %}
+        <div class="result-box">
+            <h3 style="margin: 0 0 8px 0; color: #00796b;">स्वागत आहे, {{ user_data.name }}!</h3>
+            <p style="margin: 4px 0;">मोबाईल: {{ user_data.phone }}</p>
+            <h2 style="color: #00838f; margin: 10px 0 0 0;"> ⭐ एकूण पॉईंट्स: {{ user_data.points }} </h2>
         </div>
+        {% endif %}
+
+        <a href="/" class="back-btn">⬅️ मुख्य मेनूवर जा</a>
     </div>
+
 </body>
 </html>

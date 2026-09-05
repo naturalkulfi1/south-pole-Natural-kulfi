@@ -5,112 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>South Pole Natural Kulfi</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdfaf6; /* फोटोसारखा क्रिम कलर */
-            color: #5c3a21;
-            margin: 0;
-            padding: 10px;
-            padding-bottom: 80px; 
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fdfaf6; color: #5c3a21; margin: 0; padding: 10px; padding-bottom: 90px; }
         .header { text-align: center; margin-bottom: 15px; }
-        .header h1 { color: #8b4513; font-size: 24px; margin: 5px 0; }
-        .header p { color: #666; font-size: 13px; margin: 0; font-weight: bold; }
-        .offer-banner {
-            background-color: #e67e22; /* ऑरेंज कलर */
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(230, 126, 34, 0.3);
-        }
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .nav-btn {
-            flex: 1;
-            background: white;
-            border: 1px solid #e2e8f0;
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #5c3a21;
-            font-weight: bold;
-            font-size: 13px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .admin-btn { background-color: #ffe8d6; color: #d35400; border-color: #f39c12; }
-        .form-section {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .form-section h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 16px; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #555; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; background: #f9f9f9;}
-        
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .menu-item {
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .menu-item img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+        .header h1 { color: #8b4513; font-size: 22px; margin: 5px 0; }
+        .qr-box { background: white; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .qr-box img { width: 120px; height: 120px; }
+        .form-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .form-section h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 15px; color: #8b4513; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: #555; }
+        .form-group input { width: 100%; padding: 9px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; background: #f9f9f9; }
+        .menu-item { background: white; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .menu-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
         .item-details { flex: 1; }
-        .item-details h4 { margin: 0 0 5px 0; font-size: 16px; color: #5c3a21; }
+        .item-details h4 { margin: 0 0 4px 0; font-size: 15px; color: #5c3a21; }
         .item-details p { margin: 0; color: #e67e22; font-weight: bold; }
-        .qty-control input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-weight: bold;}
-        
-        .bottom-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            box-sizing: border-box; z-index: 100;
-        }
-        .submit-btn {
-            background-color: #e67e22; color: white; width: 100%;
-            padding: 15px; border: none; border-radius: 8px;
-            font-size: 16px; font-weight: bold; cursor: pointer;
-        }
+        .qty-control input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 5px; padding: 7px; font-weight: bold; }
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; z-index: 100; }
+        .submit-btn { background-color: #e67e22; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>❄️ South Pole Natural Kulfi</h1>
-        <p>स्कॅन करा, फोटो बघून कुल्फी निवडा!</p>
+        <p>स्कॅन करा आणि ऑर्डर द्या!</p>
     </div>
 
-    <!-- फोटोसारखी ऑफर बॅनर -->
-    <div class="offer-banner">
-        <small style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; font-size: 10px;">WEEKLY OFFER</small><br>
-        <b style="font-size: 18px; display: inline-block; margin-top: 5px;">सुपर वीकेंड ऑफर 🎉</b><br>
-        <small style="font-size: 12px;">प्रत्येक रविवारी सर्व कुल्फीवर १०% सूट!</small>
-    </div>
-
-    <!-- तुमची मिसिंग असलेली बटन्स -->
-    <div class="nav-buttons">
-        <a href="/loyalty" class="nav-btn">🎁 लॉयल्टी पॉईंट्स</a>
-        <a href="/staff" class="nav-btn">👨‍🍳 किचन स्टाफ पॅनल</a>
-    </div>
-    <div class="nav-buttons">
-        <a href="/admin" class="nav-btn admin-btn">🔒 मालक (Admin Panel)</a>
+    <!-- डिझाईनमध्ये QR कोड जोडला आहे -->
+    <div class="qr-box">
+        <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: bold;">हा मेनू शेअर करण्यासाठी QR कोड:</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://your-render-app-url.onrender.com" alt="Menu QR Code">
     </div>
 
     <form action="/place_order" method="POST">
-        <!-- फोटोसारखा फॉर्म -->
         <div class="form-section">
-            <h3>१. तुमची माहिती भरा</h3>
+            <h3>१. ग्राहकाची माहिती व पेमेंट</h3>
             <div class="form-group">
                 <label>पूर्ण नाव</label>
                 <input type="text" name="customer_name" placeholder="उदा. राहुल पाटील" required>
@@ -120,39 +50,32 @@
                 <input type="tel" name="phone" placeholder="10 अंकी नंबर" pattern="[0-9]{10}" required>
             </div>
             <div class="form-group">
-                <label>जन्मतारीख (ऑप्शनल)</label>
-                <input type="date" name="dob">
+                <label>ग्राहकाने दिलेली रोकड (Cash Given ₹)</label>
+                <input type="number" name="cash_given" placeholder="उदा. 500" required>
             </div>
         </div>
 
-        <div class="form-section" style="background: transparent; box-shadow: none; padding: 0;">
-            <h3 style="border: none; color: #8b4513; margin-bottom: 10px;">आमच्या स्पेशल कुल्फी</h3>
-            
-            <div class="menu-grid">
-                <!-- कुल्फी १ -->
-                <div class="menu-item">
-                    <img src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100" alt="Sitafal">
-                    <div class="item-details">
-                        <span style="background: #fdf0d5; padding: 2px 5px; border-radius: 3px; font-size: 10px;">Classic</span>
-                        <h4>सीताफळ कुल्फी</h4>
-                        <p>₹40</p>
-                    </div>
-                    <div class="qty-control">
-                        <input type="number" name="sitafal_qty" value="0" min="0">
-                    </div>
+        <div class="form-section">
+            <h3>२. कुल्फी निवडा</h3>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100" alt="Sitafal">
+                <div class="item-details">
+                    <h4>सीताफळ कुल्फी</h4>
+                    <p>₹40</p>
                 </div>
-                
-                <!-- कुल्फी २ -->
-                <div class="menu-item">
-                    <img src="https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100" alt="Mango">
-                    <div class="item-details">
-                        <span style="background: #fdf0d5; padding: 2px 5px; border-radius: 3px; font-size: 10px;">Seasonal</span>
-                        <h4>मँगो कुल्फी</h4>
-                        <p>₹45</p>
-                    </div>
-                    <div class="qty-control">
-                        <input type="number" name="mango_qty" value="0" min="0">
-                    </div>
+                <div class="qty-control">
+                    <input type="number" name="sitafal_qty" value="0" min="0">
+                </div>
+            </div>
+            
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100" alt="Mango">
+                <div class="item-details">
+                    <h4>मँगो कुल्फी</h4>
+                    <p>₹45</p>
+                </div>
+                <div class="qty-control">
+                    <input type="number" name="mango_qty" value="0" min="0">
                 </div>
             </div>
         </div>

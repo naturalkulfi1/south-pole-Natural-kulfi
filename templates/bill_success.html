@@ -3,20 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success</title>
+    <title>Bill Success</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px 20px; background: #fdfaf6; }
-        .success-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { color: #27ae60; }
-        .btn { display: inline-block; margin-top: 20px; padding: 12px 20px; background: #e67e22; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        body { font-family: sans-serif; text-align: center; padding: 30px 20px; background: #fdfaf6; color: #5c3a21; }
+        .success-box { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        h1 { color: #27ae60; font-size: 20px; }
+        .bill-details { text-align: left; background: #fff8f0; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 14px; }
+        .whatsapp-btn { display: block; margin-top: 15px; padding: 12px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        .back-btn { display: inline-block; margin-top: 10px; text-decoration: none; background: #e67e22; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="success-box">
-        <h1>✅ ऑर्डर यशस्वी!</h1>
-        <p>तुमची ऑर्डर किचन स्टाफकडे पाठवली आहे.</p>
-        <h3>ऑर्डर नंबर: #{{ order_id }}</h3>
-        <a href="/" class="btn">नवीन ऑर्डर करा</a>
+        <h1>✅ ऑर्डर यशस्वी झाली!</h1>
+        
+        <div class="bill-details">
+            <b>ऑर्डर क्रमांक:</b> #{{ order.id }}<br>
+            <b>ग्राहक:</b> {{ order.name }}<br>
+            <b>मोबाईल:</b> {{ order.phone }}<br>
+            <hr style="border: 0; border-top: 1px dashed #ddd; margin: 8px 0;">
+            {% for item in order.items %}
+            {{ item.name }} x {{ item.qty }} = ₹{{ item.total }}<br>
+            {% endfor %}
+            <hr style="border: 0; border-top: 1px dashed #ddd; margin: 8px 0;">
+            <b>एकूण बिल: ₹{{ order.total }}</b><br>
+            <b>दिलेली रोकड: ₹{{ order.cash_given }}</b><br>
+            <b style="color: #c0392b; font-size: 16px;">ग्राहकाला परत द्यायचे पैसे (Change): ₹{{ order.return_change }}</b>
+        </div>
+
+        <!-- WhatsApp वर बिल पाठवण्यासाठी लिंक -->
+        <a href="https://wa.me/91{{ order.phone }}?text=Hello%20{{ order.name }},%20Thank%20you%20for%20ordering%20at%20South%20Pole%20Natural%20Kulfi!%20Your%20Bill%20Amount%20is%20Rs.%20{{ order.total }}" target="_blank" class="whatsapp-btn">
+            💬 WhatsApp वर बिल पाठवा
+        </a>
+
+        <a href="/" class="back-btn">🏠 नवीन ऑर्डर करा</a>
     </div>
 </body>
 </html>

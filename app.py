@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from datetime import datetime
+from datetime import datetime, timedelta
 import urllib.parse
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_secret_key'
+app.secret_key = 'south_pole_ultimate_secret_key'
 
 # दक्षिण पोल नॅचरल कुल्फीचे सर्व ३६ आयटम्स
 MENU_ITEMS = [
@@ -93,7 +93,6 @@ def place_order():
 
     order_id = len(ORDERS) + 1
     
-    # WhatsApp message formatting with bill + social links + review link
     items_text = "\n".join([f"- {i['name']} x {i['qty']} = ₹{i['total']}" for i in ordered_items])
     whatsapp_msg = f"""🍦 *South Pole Natural Kulfi* 🍦
 नमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏
@@ -188,16 +187,69 @@ def admin_login():
 def admin_panel():
     if not session.get('admin_logged'):
         return redirect(url_for('admin_login'))
+    
     total_sales = sum(o['total'] for o in ORDERS)
     total_orders = len(ORDERS)
+    
+    now = datetime.now()
+    daily_sales = 0
+    weekly_sales = 0
+    monthly_sales = 0
+    yearly_sales = 0
+    
+    for o in ORDERS:
+        try:
+            order_date = datetime.strptime(o['date'], "%Y-%m-%d %H:%M")
+            if order_date.date() == now.date():
+                daily_sales += o['total']
+            if order_date >= now - timedelta(days=7):
+                weekly_sales += o['total']
+            if order_date.month == now.month and order_date.year == now.year:
+                monthly_sales += o['total']
+            if order_date.year == now.year:
+                yearly_sales += o['total']
+        except:
+            pass
+
     base_url = request.host_url
     qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
-    return render_template('admin_panel.html', orders=ORDERS, total_sales=total_sales, total_orders=total_orders, menu=MENU_ITEMS, staff=STAFF_LIST, loyalty_users=LOYALTY_DB, social=SOCIAL_LINKS, qr_url=qr_api_url, store_url=base_url)
+    
+    return render_template('admin_panel.html', 
+                           orders=ORDERS, 
+                           total_sales=total_sales, 
+                           total_orders=total_orders, 
+                           daily_sales=daily_sales,
+                           weekly_sales=weekly_sales,
+                           monthly_sales=monthly_sales,
+                           yearly_sales=yearly_sales,
+                           menu=MENU_ITEMS, 
+                           staff=STAFF_LIST, 
+                           loyalty_users=LOYALTY_DB, 
+                           social=SOCIAL_LINKS, 
+                           qr_url=qr_api_url, 
+                           store_url=base_url)
 
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin_logged', None)
     return redirect(url_for('admin_login'))
+
+@app.route('/admin/add_menu', methods=['POST'])
+def add_menu():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    name = request.form.get('name')
+    price = float(request.form.get('price', 0))
+    category = request.form.get('category', 'General')
+    new_id = len(MENU_ITEMS) + 1
+    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category})
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_menu/<int:item_id>')
+def delete_menu(item_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    global MENU_ITEMS
+    MENU_ITEMS = [item for item in MENU_ITEMS if item['id'] != item_id]
+    return redirect(url_for('admin_panel'))
 
 @app.route('/loyalty', methods=['GET', 'POST'])
 def check_loyalty():

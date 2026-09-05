@@ -15,7 +15,6 @@
 
         .banner { background: #d4edda; color: #155724; padding: 6px; border-radius: 4px; text-align: center; font-size: 11px; font-weight: bold; margin-bottom: 8px; border: 1px solid #c3e6cb; }
 
-        /* POS Grid layout */
         .grid-title { font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px; }
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
         .menu-card { background: #fff; border: 1px solid #b2ebf2; border-radius: 5px; padding: 8px; text-align: center; cursor: pointer; user-select: none; transition: 0.1s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
@@ -23,7 +22,6 @@
         .menu-card h4 { margin: 2px 0; font-size: 12px; color: #006064; }
         .menu-card p { margin: 0; font-size: 11px; color: #00838f; font-weight: bold; }
 
-        /* कार्ट व फॉर्म */
         .section-box { background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; font-size: 12px; }
         .form-row { display: flex; gap: 6px; margin-bottom: 6px; }
         .form-group { flex: 1; }
@@ -41,7 +39,7 @@
 
     <div class="header">
         <h1>South Pole Natural Kulfi</h1>
-        <p>POS Billing Counter (36 Items)</p>
+        <p>POS Counter & QR Menu (36 Items)</p>
     </div>
 
     <div class="top-nav">
@@ -52,11 +50,10 @@
     </div>
 
     <div class="banner">
-        💡 टीप: खालील आयटमवर जेवढ्या वेळा क्लिक कराल, तेवढी क्वांटिटी ऍड होईल!
+        💡 टीप: आयटमवर जेवढ्या वेळा क्लिक कराल, तेवढी क्वांटिटी ऍड होईल!
     </div>
 
     <form action="/place_order" method="POST" id="posForm">
-        
         <div class="grid-title">सर्व ३६ आयटम्स (Tap to Add):</div>
         <div class="menu-grid">
             {% for item in items %}
@@ -64,7 +61,6 @@
                 <h4>{{ item.name }}</h4>
                 <p>₹{{ item.price }}</p>
             </div>
-            <!-- Hidden inputs to send quantities to Flask backend -->
             <input type="hidden" id="item_qty_{{ item.id }}" name="item_{{ item.id }}" value="0">
             {% endfor %}
         </div>
@@ -107,58 +103,37 @@
 
     <script>
         const cart = {};
-
         function incrementItem(id, name, price) {
-            if (!cart[id]) {
-                cart[id] = { name: name, price: price, qty: 0 };
-            }
+            if (!cart[id]) { cart[id] = { name: name, price: price, qty: 0 }; }
             cart[id].qty += 1;
             document.getElementById('item_qty_' + id).value = cart[id].qty;
             updateCartDisplay();
         }
-
         function decrementItem(id) {
             if (cart[id] && cart[id].qty > 0) {
                 cart[id].qty -= 1;
-                if (cart[id].qty === 0) {
-                    delete cart[id];
-                }
+                if (cart[id].qty === 0) { delete cart[id]; }
                 document.getElementById('item_qty_' + id).value = cart[id] ? cart[id].qty : 0;
                 updateCartDisplay();
             }
         }
-
         function updateCartDisplay() {
             const cartList = document.getElementById('cartList');
             cartList.innerHTML = '';
-            let total = 0;
-            let hasItems = false;
-
+            let total = 0; let hasItems = false;
             for (let id in cart) {
                 hasItems = true;
                 let item = cart[id];
                 let itemTotal = item.price * item.qty;
                 total += itemTotal;
-
                 let div = document.createElement('div');
                 div.className = 'cart-item';
-                div.innerHTML = `
-                    <span><b>${item.name}</b> (₹${item.price} x ${item.qty})</span>
-                    <span>
-                        ₹${itemTotal} 
-                        <button type="button" onclick="decrementItem(${id})" style="background:#e74c3c; color:white; border:none; padding:2px 6px; border-radius:3px; margin-left:5px; cursor:pointer;">-</button>
-                    </span>
-                `;
+                div.innerHTML = `<span><b>${item.name}</b> (₹${item.price} x ${item.qty})</span><span>₹${itemTotal} <button type="button" onclick="decrementItem(${id})" style="background:#e74c3c; color:white; border:none; padding:2px 6px; border-radius:3px; margin-left:5px; cursor:pointer;">-</button></span>`;
                 cartList.appendChild(div);
             }
-
-            if (!hasItems) {
-                cartList.innerHTML = '<span style="color:#777; font-size: 11px;">कोणताही आयटम निवडलेला नाही.</span>';
-            }
-
+            if (!hasItems) { cartList.innerHTML = '<span style="color:#777; font-size: 11px;">कोणताही आयटम निवडलेला नाही.</span>'; }
             document.getElementById('grandTotal').innerText = total;
         }
     </script>
-
 </body>
 </html>

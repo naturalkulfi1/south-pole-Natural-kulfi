@@ -3,86 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>South Pole Natural Kulfi</title>
+    <title>South Pole Natural Kulfi - POS</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%); color: #004d40; margin: 0; padding: 10px; padding-bottom: 90px; }
-        .header { text-align: center; margin-bottom: 15px; }
-        .header h1 { color: #006064; font-size: 23px; margin: 5px 0; }
-        .header p { color: #00838f; font-weight: bold; font-size: 13px; margin: 0; }
-        .nav-buttons { display: flex; gap: 8px; margin-bottom: 15px; }
-        .nav-btn { flex: 1; background: white; border: 1px solid #b2ebf2; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; color: #006064; font-weight: bold; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .form-section { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
-        .form-section h3 { margin-top: 0; border-bottom: 2px solid #e0f7fa; padding-bottom: 8px; font-size: 15px; color: #006064; }
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: #004d40; }
-        .form-group input { width: 100%; padding: 9px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; background: #f4fdff; }
-        .menu-item { background: white; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e0f7fa; }
-        .menu-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
-        .item-details { flex: 1; }
-        .item-details h4 { margin: 0 0 4px 0; font-size: 15px; color: #004d40; }
-        .item-details p { margin: 0; color: #00838f; font-weight: bold; }
-        .qty-control input { width: 50px; text-align: center; border: 1px solid #b2ebf2; border-radius: 5px; padding: 7px; font-weight: bold; }
-        .social-footer { text-align: center; margin: 15px 0; font-size: 13px; }
-        .social-footer a { margin: 0 8px; color: #006064; text-decoration: none; font-weight: bold; }
-        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; z-index: 100; }
-        .submit-btn { background-color: #00838f; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        body { font-family: sans-serif; background: #f0f4f1; margin: 0; padding: 10px; color: #2c3e50; }
+        .header { background: #134f2c; color: white; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header p { margin: 3px 0 0 0; font-size: 11px; opacity: 0.9; }
+        
+        /* नॅव्हिगेशन आणि टॅब्स */
+        .top-nav { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .nav-link { background: white; border: 1px solid #134f2c; color: #134f2c; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; white-space: nowrap; }
+        
+        .scheme-banner { background: #d4edda; color: #155724; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 10px; border: 1px solid #c3e6cb; }
+
+        /* आयटम ग्रिड (Petpooja Style) */
+        .section-title { font-size: 13px; font-weight: bold; color: #134f2c; margin-bottom: 6px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 300px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; }
+        .menu-card { background: #fff; border: 1px solid #c8e6c9; border-radius: 6px; padding: 8px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .menu-card:active { background: #e8f5e9; transform: scale(0.98); }
+        .menu-card h4 { margin: 4px 0; font-size: 13px; color: #134f2c; }
+        .menu-card p { margin: 0; font-size: 12px; color: #2e7d32; font-weight: bold; }
+
+        /* कार्ट व फॉर्म */
+        .cart-box { background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; }
+        .cart-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+        .cart-table th, .cart-table td { padding: 5px; text-align: left; border-bottom: 1px solid #eee; }
+        
+        .form-row { display: flex; gap: 8px; margin-top: 8px; }
+        .form-group { flex: 1; }
+        .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 2px; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 13px; }
+        
+        .total-box { background: #e8f5e9; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; margin-top: 8px; color: #1b5e20; }
+        .submit-btn { background: #134f2c; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>❄️ South Pole Natural Kulfi</h1>
-        <p>मॅकडोनाल्ड्स स्टाईल सेल्फ ऑर्डरिंग</p>
+        <h1>South Pole Natural Kulfi</h1>
+        <p>100% Natural • Fresh Fruits • Pure Ingredients</p>
     </div>
 
-    <div class="nav-buttons">
-        <a href="/loyalty" class="nav-btn">🎁 लॉयल्टी पॉईंट्स</a>
-        <a href="/staff/login" class="nav-btn">👨‍🍳 स्टाफ लॉगिन</a>
-        <a href="/admin/login" class="nav-btn" style="background-color: #e0f7fa; color: #006064;">🔒 ॲडमिन लॉगिन</a>
+    <div class="top-nav">
+        <a href="/" class="nav-link" style="background:#134f2c; color:white;">⚡ POS बिलिंग</a>
+        <a href="/loyalty" class="nav-link">🎁 लॉयल्टी</a>
+        <a href="/staff/login" class="nav-link">👨‍🍳 स्टाफ लॉगिन</a>
+        <a href="/admin/login" class="nav-link">🔒 ॲडमिन</a>
+    </div>
+
+    <div class="scheme-banner">
+        स्कीम: प्रत्येक ८ खरेदीवर १ कुल्फी फ्री! (BOGO ऑॅक्टिव्ह)
     </div>
 
     <form action="/place_order" method="POST">
-        <div class="form-section">
-            <h3>१. ग्राहकाची माहिती व पेमेंट</h3>
-            <div class="form-group">
-                <label>पूर्ण नाव</label>
-                <input type="text" name="customer_name" placeholder="उदा. राहुल पाटील" required>
-            </div>
-            <div class="form-group">
-                <label>मोबाईल नंबर (WhatsApp)</label>
-                <input type="tel" name="phone" placeholder="10 अंकी नंबर" pattern="[0-9]{10}" required>
-            </div>
-            <div class="form-group">
-                <label>ग्राहकाने दिलेली रोकड (Cash Given ₹)</label>
-                <input type="number" name="cash_given" placeholder="उदा. 500" required>
-            </div>
-        </div>
-
-        <div class="form-section">
-            <h3>२. आमचा कुल्फी मेनू</h3>
+        <div class="section-title">आयटम निवडा (Click to Add / Modify Qty)</div>
+        <div class="menu-grid">
             {% for item in items %}
-            <div class="menu-item">
-                <img src="{{ item.image }}" alt="{{ item.name }}">
-                <div class="item-details">
-                    <h4>{{ item.name }}</h4>
-                    <p>₹{{ item.price }}</p>
-                </div>
-                <div class="qty-control">
-                    <input type="number" name="item_{{ item.id }}" value="0" min="0">
+            <div class="menu-card">
+                <h4>{{ item.name }}</h4>
+                <p>₹{{ item.price }}</p>
+                <div style="margin-top: 5px;">
+                    <input type="number" name="item_{{ item.id }}" value="0" min="0" style="width: 45px; text-align: center; padding: 3px; font-weight: bold; border: 1px solid #134f2c; border-radius: 4px;">
                 </div>
             </div>
             {% endfor %}
         </div>
 
-        <div class="social-footer">
-            <a href="{{ social.instagram }}" target="_blank">Instagram</a> | 
-            <a href="{{ social.facebook }}" target="_blank">Facebook</a> | 
-            <a href="{{ social.youtube }}" target="_blank">YouTube</a>
+        <div class="cart-box">
+            <div class="section-title" style="margin-bottom: 5px;">ग्राहकाची माहिती व पेमेंट</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ग्राहकाचे नाव</label>
+                    <input type="text" name="customer_name" placeholder="नाव" required>
+                </div>
+                <div class="form-group">
+                    <label>मोबाईल (WhatsApp)</label>
+                    <input type="tel" name="phone" placeholder="10 अंकी नंबर" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 6px;">
+                <label>ग्राहकाने दिलेले पैसे (Cash Given ₹)</label>
+                <input type="number" name="cash_given" placeholder="उदा. 500" required>
+            </div>
         </div>
 
-        <div class="bottom-bar">
-            <button type="submit" class="submit-btn">ऑर्डर कन्फर्म करा & बिल बनवा 🚀</button>
-        </div>
+        <button type="submit" class="submit-btn">बिल बनवा & WhatsApp पाठवा 🚀</button>
     </form>
 
 </body>

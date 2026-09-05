@@ -4,13 +4,19 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = 'south_pole_secret_key'
 
-# डायनॅमिक मेनू डेटा
+# ३६+ कुल्फी आणि प्रॉडक्ट्सचा मेनू (Petpooja Style POS Menu)
 MENU_ITEMS = [
-    {"id": 1, "name": "सीताफळ कुल्फी", "price": 40, "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100"},
-    {"id": 2, "name": "मँगो कुल्फी", "price": 45, "image": "https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100"}
+    {"id": 1, "name": "Jamun / Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100"},
+    {"id": 2, "name": "Paan / Mango / Sitafal Kulfi", "price": 30, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100"},
+    {"id": 3, "name": "Special Mawa Kulfi", "price": 45, "category": "Special", "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=100"},
+    {"id": 4, "name": "Anjeer Ice Cream Scoop", "price": 85, "category": "Scoop", "image": "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=100"},
+    {"id": 5, "name": "Mango / Sitafal Scoop", "price": 65, "category": "Scoop", "image": "https://images.unsplash.com/photo-1560008511-11c63416e52d?w=100"},
+    {"id": 6, "name": "Dry Fruits Shake", "price": 125, "category": "Shake", "image": "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=100"},
+    {"id": 7, "name": "Anjeer Shake", "price": 105, "category": "Shake", "image": "https://images.unsplash.com/photo-1553787499-3f9d37c9d3f4?w=100"},
+    {"id": 8, "name": "Anjeer Mastani", "price": 145, "category": "Mastani", "image": "https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100"},
+    # इथे तुम्ही ॲडमिन पॅनलमधून किंवा थेट ३६ आयटम्स जोडू शकता
 ]
 
-# स्टाफ डेटाबेस
 STAFF_LIST = [
     {"id": 1, "username": "staff1", "password": "123", "name": "रोहन (कौंटर)", "phone": "9876543210"}
 ]
@@ -34,7 +40,6 @@ def customer_portal():
 def place_order():
     name = request.form.get('customer_name')
     phone = request.form.get('phone')
-    dob = request.form.get('dob')
     cash_given = float(request.form.get('cash_given', 0) or 0)
     
     ordered_items = []
@@ -53,21 +58,14 @@ def place_order():
         if phone in LOYALTY_DB:
             LOYALTY_DB[phone]['points'] += 1
             if name: LOYALTY_DB[phone]['name'] = name
-            if dob: LOYALTY_DB[phone]['dob'] = dob
         else:
-            LOYALTY_DB[phone] = {
-                "name": name, 
-                "phone": phone, 
-                "dob": dob if dob else "उपलब्ध नाही", 
-                "points": 1 
-            }
+            LOYALTY_DB[phone] = {"name": name, "phone": phone, "points": 1}
 
     order_id = len(ORDERS) + 1
     order_data = {
         "id": order_id,
         "name": name,
         "phone": phone,
-        "dob": dob,
         "items": ordered_items,
         "total": total_amount,
         "cash_given": cash_given,
@@ -78,7 +76,6 @@ def place_order():
     
     return render_template('bill_success.html', order=order_data, social=SOCIAL_LINKS)
 
-# स्टाफ लॉगिन व पॅनल
 @app.route('/staff/login', methods=['GET', 'POST'])
 def staff_login():
     error = None
@@ -103,7 +100,6 @@ def staff_logout():
     session.pop('staff_logged', None)
     return redirect(url_for('staff_login'))
 
-# ॲडमिन लॉगिन व पॅनल
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     error = None
@@ -133,9 +129,10 @@ def add_menu():
     if not session.get('admin_logged'): return redirect(url_for('admin_login'))
     name = request.form.get('name')
     price = float(request.form.get('price', 0))
-    image = request.form.get('image')
+    category = request.form.get('category', 'General')
+    image = request.form.get('image', 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100')
     new_id = len(MENU_ITEMS) + 1
-    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "image": image})
+    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category, "image": image})
     return redirect(url_for('admin_panel'))
 
 @app.route('/admin/delete_menu/<int:item_id>')
@@ -168,13 +165,11 @@ def check_loyalty():
     user_data = None
     message = None
     if request.method == 'POST':
-        action = request.form.get('action')
         phone = request.form.get('phone')
-        if action == 'check':
-            if phone in LOYALTY_DB:
-                user_data = LOYALTY_DB[phone]
-            else:
-                message = "हा नंबर लॉयल्टी प्रोग्राममध्ये सापडला नाही."
+        if phone in LOYALTY_DB:
+            user_data = LOYALTY_DB[phone]
+        else:
+            message = "हा नंबर लॉयल्टी प्रोग्राममध्ये सापडला नाही."
     return render_template('check_loyalty.html', user_data=user_data, message=message)
 
 if __name__ == '__main__':

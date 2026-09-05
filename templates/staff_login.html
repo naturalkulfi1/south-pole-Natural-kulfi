@@ -3,35 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login - South Pole Kulfi</title>
+    <title>Staff Login - South Pole</title>
     <style>
-        body { font-family: sans-serif; background: #e0f7fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; border: 1px solid #b2ebf2; }
-        h2 { color: #006064; text-align: center; margin-top: 0; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #004d40; margin-bottom: 4px; }
-        .form-group input { width: 100%; padding: 10px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 10px; background: #00838f; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .error { color: #e74c3c; font-size: 12px; text-align: center; margin-bottom: 10px; font-weight: bold; }
-        .back-link { display: block; text-align: center; margin-top: 12px; color: #00838f; text-decoration: none; font-size: 12px; font-weight: bold; }
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 15px; }
+        .box { background: white; max-width: 350px; margin: 50px auto; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #004d40; text-align: center; margin-top: 0; }
+        input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #004d40; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .error { color: red; font-size: 12px; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="login-box">
+    <div class="box">
         <h2>👨‍🍳 स्टाफ लॉगिन</h2>
-        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
         <form method="POST">
-            <div class="form-group">
-                <label>युजरनेम (उदा. staff1)</label>
-                <input type="text" name="username" required>
-            </div>
-            <div class="form-group">
-                <label>पासवर्ड (उदा. 123)</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit" class="btn">लॉगिन करा</button>
+            <input type="text" name="username" placeholder="युजरनेम" required>
+            <input type="password" name="password" placeholder="पासवर्ड" required>
+            <button type="submit">लॉगिन करा</button>
         </form>
-        <a href="/" class="back-link">⬅️ मुख्य मेनूवर जा</a>
+        <p style="text-align: center; margin-top: 10px;"><a href="/" style="font-size: 12px; color: #004d40;">⬅️ होम पेजवर जा</a></p>
     </div>
 </body>
 </html>

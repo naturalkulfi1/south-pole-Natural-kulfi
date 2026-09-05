@@ -3,16 +3,16 @@ from datetime import datetime, timedelta
 import urllib.parse
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_absolute_final_secret_key'
+app.secret_key = 'south_pole_ultimate_final_secret_key_2026'
 
-# ब्रँड, टॅगलाईन आणि लोगो सेटिंग (ॲडमिन पॅनेलमधून बदलता येईल)
+# ब्रँड, टॅगलाईन आणि लोगो सेटिंग
 STORE_CONFIG = {
     "name": "South Pole Natural Kulfi",
     "tagline": "POS Counter & QR Menu with Photos",
-    "logo": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150" # इथे तुमचा लोगो टाका
+    "logo": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
 }
 
-# दक्षिण पोल नॅचरल कुल्फीचे सर्व ३६ आयटम्स (फोटो लिंक्ससह)
+# सर्व ३६ आयटम्स
 MENU_ITEMS = [
     {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"},
     {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
@@ -62,9 +62,7 @@ LOYALTY_DB = {}
 
 SOCIAL_LINKS = {
     "instagram": "https://instagram.com/southpolenaturalkulfi",
-    "facebook": "https://facebook.com/southpolenaturalkulfi",
-    "youtube": "https://youtube.com/@southpolenaturalkulfi",
-    "google_review": "https://g.page/r/your-google-review-link"
+    "facebook": "https://facebook.com/southpolenaturalkulfi"
 }
 
 @app.route('/')
@@ -101,23 +99,8 @@ def place_order():
     order_id = len(ORDERS) + 1
     items_text = "\n".join([f"- {i['name']} x {i['qty']} = ₹{i['total']}" for i in ordered_items])
     
-    whatsapp_msg = f"""🍦 *{STORE_CONFIG['name']}* 🍦
-नमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏
-
-🧾 *ऑर्डर बिल (Order ID: #{order_id})*
-{items_text}
-
-💰 *एकूण रक्कम:* ₹{total_amount}
-💵 *दिलेले पैसे:* ₹{cash_given}
-🔄 *परत दिलेले पैसे:* ₹{return_change}
-
----
-🌟 आमचे सोशल मीडिया पेज फॉलो करा:
-📸 Instagram: {SOCIAL_LINKS['instagram']}
-📘 Facebook: {SOCIAL_LINKS['facebook']}
-
-पुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
-
+    whatsapp_msg = f"""🍦 *{STORE_CONFIG['name']}* 🍦\nनमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏\n\n🧾 *ऑर्डर बिल (Order ID: #{order_id})*\n{items_text}\n\n💰 *एकूण रक्कम:* ₹{total_amount}\n💵 *दिलेले पैसे:* ₹{cash_given}\n🔄 *परत दिले:* ₹{return_change}\n\nपुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
+    
     encoded_msg = urllib.parse.quote(whatsapp_msg)
     whatsapp_link = f"https://wa.me/91{phone}?text={encoded_msg}"
 
@@ -149,53 +132,14 @@ def admin_panel():
     total_orders = len(ORDERS)
     
     now = datetime.now()
-    daily_sales = 0
-    weekly_sales = 0
-    monthly_sales = 0
-    yearly_sales = 0
+    daily_sales = sum(o['total'] for o in ORDERS if datetime.strptime(o['date'], "%Y-%m-%d %H:%M").date() == now.date())
+    weekly_sales = sum(o['total'] for o in ORDERS if datetime.strptime(o['date'], "%Y-%m-%d %H:%M") >= now - timedelta(days=7))
+    monthly_sales = sum(o['total'] for o in ORDERS if datetime.strptime(o['date'], "%Y-%m-%d %H:%M").month == now.month)
     
-    for o in ORDERS:
-        try:
-            order_date = datetime.strptime(o['date'], "%Y-%m-%d %H:%M")
-            if order_date.date() == now.date():
-                daily_sales += o['total']
-            if order_date >= now - timedelta(days=7):
-                weekly_sales += o['total']
-            if order_date.month == now.month and order_date.year == now.year:
-                monthly_sales += o['total']
-            if order_date.year == now.year:
-                yearly_sales += o['total']
-        except:
-            pass
-
-    base_url = request.host_url
-    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
-
     return render_template('admin_panel.html', 
                            orders=ORDERS, total_sales=total_sales, total_orders=total_orders,
-                           daily_sales=daily_sales, weekly_sales=weekly_sales,
-                           monthly_sales=monthly_sales, yearly_sales=yearly_sales,
-                           menu=MENU_ITEMS, config=STORE_CONFIG, 
-                           loyalty_users=LOYALTY_DB, qr_url=qr_api_url, store_url=base_url)
-
-@app.route('/admin/add_item', methods=['POST'])
-def admin_add_item():
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    new_id = max([i['id'] for i in MENU_ITEMS], default=0) + 1
-    name = request.form.get('name')
-    price = float(request.form.get('price', 0))
-    category = request.form.get('category')
-    image = request.form.get('image') or "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
-    
-    MENU_ITEMS.append({"id": new_id, "name": name, "price": price, "category": category, "image": image})
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/delete_item/<int:item_id>')
-def admin_delete_item(item_id):
-    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
-    global MENU_ITEMS
-    MENU_ITEMS = [i for i in MENU_ITEMS if i['id'] != item_id]
-    return redirect(url_for('admin_panel'))
+                           daily_sales=daily_sales, weekly_sales=weekly_sales, monthly_sales=monthly_sales,
+                           menu=MENU_ITEMS, staff_list=STAFF_LIST, config=STORE_CONFIG, loyalty_users=LOYALTY_DB)
 
 @app.route('/admin/update_config', methods=['POST'])
 def admin_update_config():
@@ -205,6 +149,46 @@ def admin_update_config():
     STORE_CONFIG['logo'] = request.form.get('logo_url')
     return redirect(url_for('admin_panel'))
 
+@app.route('/admin/add_item', methods=['POST'])
+def admin_add_item():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    new_id = max([i['id'] for i in MENU_ITEMS], default=0) + 1
+    MENU_ITEMS.append({
+        "id": new_id,
+        "name": request.form.get('name'),
+        "price": float(request.form.get('price', 0)),
+        "category": request.form.get('category'),
+        "image": request.form.get('image') or "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
+    })
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_item/<int:item_id>')
+def admin_delete_item(item_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    global MENU_ITEMS
+    MENU_ITEMS = [i for i in MENU_ITEMS if i['id'] != item_id]
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/add_staff', methods=['POST'])
+def admin_add_staff():
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    new_id = max([s['id'] for s in STAFF_LIST], default=0) + 1
+    STAFF_LIST.append({
+        "id": new_id,
+        "username": request.form.get('username'),
+        "password": request.form.get('password'),
+        "name": request.form.get('name'),
+        "phone": request.form.get('phone')
+    })
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/delete_staff/<int:staff_id>')
+def admin_delete_staff(staff_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    global STAFF_LIST
+    STAFF_LIST = [s for s in STAFF_LIST if s['id'] != staff_id]
+    return redirect(url_for('admin_panel'))
+
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin_logged', None)
@@ -212,8 +196,7 @@ def admin_logout():
 
 @app.route('/loyalty', methods=['GET', 'POST'])
 def check_loyalty():
-    user_data = None
-    message = None
+    user_data, message = None, None
     if request.method == 'POST':
         phone = request.form.get('phone')
         if phone in LOYALTY_DB: user_data = LOYALTY_DB[phone]
@@ -234,9 +217,7 @@ def staff_login():
 @app.route('/staff')
 def staff_panel():
     if not session.get('staff_logged') and not session.get('admin_logged'): return redirect(url_for('staff_login'))
-    base_url = request.host_url
-    qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={base_url}"
-    return render_template('staff_panel.html', orders=ORDERS, config=STORE_CONFIG, qr_url=qr_api_url, store_url=base_url)
+    return render_template('staff_panel.html', orders=ORDERS, config=STORE_CONFIG)
 
 @app.route('/staff/confirm/<int:order_id>')
 def staff_confirm_order(order_id):

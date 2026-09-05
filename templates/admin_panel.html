@@ -3,40 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - South Pole Kulfi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; background: #fdfaf6; padding: 15px; color: #5c3a21; }
+        h2 { color: #d35400; text-align: center; }
+        .card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; background: #e67e22; color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-amber-50 p-4 pb-20">
-    <div class="max-w-md mx-auto space-y-4">
-        <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow border border-amber-200">
-            <h1 class="text-lg font-extrabold text-amber-900">⚙️ ॲडमिन कंट्रोल पॅनल</h1>
-            <a href="/order" class="bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">मेनू</a>
-        </div>
+<body>
+    <a href="/" class="back-btn">⬅️ मुख्य पानावर जा</a>
+    <h2>🔒 मालक डॅशबोर्ड & रिपोर्ट्स (Admin Panel)</h2>
 
-        <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-3">
-            <h2 class="font-bold text-gray-800 border-b pb-2 text-sm">➕ नवीन कुल्फी जोडा</h2>
-            <form method="POST" class="space-y-2.5">
-                <input type="hidden" name="action" value="add_item">
-                <input type="text" name="name" placeholder="कुल्फीचे नाव" required class="w-full p-2 border rounded text-sm outline-none">
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="number" name="price" placeholder="किंमत (₹)" required class="w-full p-2 border rounded text-sm outline-none">
-                    <input type="text" name="category" placeholder="कॅटेगरी (Classic)" required class="w-full p-2 border rounded text-sm outline-none">
-                </div>
-                <input type="url" name="image" placeholder="फोटो लिंक (Image URL)" required class="w-full p-2 border rounded text-sm outline-none">
-                <button type="submit" class="w-full bg-amber-600 text-white font-bold py-2 rounded shadow text-sm">कुल्फी जोडा</button>
-            </form>
-        </div>
+    <div class="card">
+        <h3>📊 व्यावसायिक अहवाल (Sales Summary)</h3>
+        <p>एकूण ऑर्डर्स: <b>{{ total_orders }}</b></p>
+        <p>एकूण विक्री (Total Revenue): <b style="color: #27ae60;">₹{{ total_sales }}</b></p>
+    </div>
 
-        <div class="bg-white p-4 rounded-xl shadow border border-amber-200 space-y-3">
-            <h2 class="font-bold text-gray-800 border-b pb-2 text-sm">🏷️ नवीन ऑफर जोडा</h2>
-            <form method="POST" class="space-y-2.5">
-                <input type="hidden" name="action" value="add_offer">
-                <input type="text" name="title" placeholder="ऑफर शीर्षक" required class="w-full p-2 border rounded text-sm outline-none">
-                <input type="text" name="desc" placeholder="वर्णन" required class="w-full p-2 border rounded text-sm outline-none">
-                <input type="text" name="type" placeholder="प्रकार (Daily/Weekly/Monthly)" required class="w-full p-2 border rounded text-sm outline-none">
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded shadow text-sm">ऑफर पब्लिश करा</button>
-            </form>
-        </div>
+    <div class="card">
+        <h3>📋 सर्व ऑर्डर्सची यादी</h3>
+        {% if orders %}
+            {% for o in orders %}
+            <div style="border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 8px;">
+                <b>#{{ o.id }} - {{ o.name }}</b> ({{ o.phone }})<br>
+                <span>रक्कम: ₹{{ o.total }} | वेळ: {{ o.date }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>कोणतीही ऑर्डर नाही.</p>
+        {% endif %}
     </div>
 </body>
 </html>

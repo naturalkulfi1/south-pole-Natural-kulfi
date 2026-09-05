@@ -3,33 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>लॉयल्टी पॉईंट्स तपासा</title>
+    <title>Check Loyalty - South Pole Natural Kulfi</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-amber-50">
-    <div class="max-w-md mx-auto p-4">
-        <div class="text-center my-6">
-            <h1 class="text-3xl font-extrabold text-amber-900">⭐ लॉयल्टी पॉईंट्स</h1>
-            <p class="text-gray-600">तुमचा मोबाईल नंबर टाकून पॉईंट्स तपासा</p>
-        </div>
+    <div class="max-w-md mx-auto p-4 min-h-screen flex flex-col justify-center">
+        <div class="bg-white p-6 rounded-2xl shadow-xl border border-amber-200 space-y-6">
+            <div class="text-center">
+                <h1 class="text-2xl font-extrabold text-amber-900">🎁 लॉयल्टी पॉईंट्स तपासा</h1>
+                <p class="text-gray-600 text-sm mt-1">तुमचा मोबाईल नंबर टाका आणि पॉईंट्स बघा</p>
+            </div>
 
-        <form method="POST" class="bg-white p-6 rounded-xl shadow-md space-y-4">
-            <input type="text" name="phone" placeholder="मोबाईल नंबर (Phone Number)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500">
-            <button type="submit" class="w-full bg-amber-600 text-white font-bold p-3 rounded-xl shadow-md hover:bg-amber-700 transition">
-                पॉईंट्स पहा
-            </button>
-        </form>
+            <form method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">मोबाईल नंबर</label>
+                    <input type="tel" name="phone" placeholder="10 अंकी मोबाईल नंबर" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 text-white font-bold py-3 rounded-xl shadow hover:bg-amber-700 transition">
+                    पॉईंट्स तपासा 🔍
+                </button>
+            </form>
 
-        {% if customer %}
-        <div class="mt-6 bg-white p-6 rounded-xl shadow-md text-center space-y-2">
-            <h2 class="text-xl font-bold text-gray-800">नमस्कार, {{ customer.name }}!</h2>
-            <p class="text-gray-600">तुमचे एकूण लॉयल्टी पॉईंट्स:</p>
-            <div class="text-4xl font-extrabold text-amber-600">{{ customer.loyalty_points }} ⭐</div>
-        </div>
-        {% endif %}
+            {% if phone %}
+            <div class="bg-amber-50 p-4 rounded-xl text-center border border-amber-200 space-y-1">
+                <p class="text-xs text-gray-500">नंबर: {{ phone }}</p>
+                <p class="text-xl font-bold text-amber-900">तुमचे पॉईंट्स: {{ points }} ⭐</p>
+            </div>
+            {% endif %}
 
-        <div class="text-center mt-6">
-            <a href="/order" class="text-amber-700 font-semibold underline">← मुख्य मेनूवर जा</a>
+            <div class="text-center">
+                <a href="/order" class="text-amber-700 font-semibold text-sm hover:underline">← मेनू कडे जा</a>
+            </div>
         </div>
     </div>
 </body>

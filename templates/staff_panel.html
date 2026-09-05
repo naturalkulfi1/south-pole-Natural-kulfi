@@ -3,35 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Panel - South Pole Kulfi</title>
+    <title>Staff Panel - South Pole POS</title>
     <style>
-        body { font-family: sans-serif; background: #e0f7fa; padding: 15px; color: #004d40; }
-        h2 { color: #006064; text-align: center; }
-        .logout-btn { display: inline-block; float: right; background: #e74c3c; color: white; padding: 6px 12px; border-radius: 5px; text-decoration: none; font-size: 12px; font-weight: bold; }
-        .order-card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
-        .back-btn { display: inline-block; margin-bottom: 15px; text-decoration: none; background: #00838f; color: white; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: bold; }
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
+        .header { background: #004d40; color: white; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 16px; }
+        .logout-btn { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; }
+        
+        .card { background: white; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 10px; }
+        .card h3 { margin-top: 0; color: #004d40; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .qr-box { text-align: center; background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px dashed #004d40; margin-bottom: 10px; }
+        .qr-box img { width: 150px; height: 150px; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .qr-box p { font-size: 11px; color: #555; margin: 5px 0 0 0; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 5px; }
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+        th { background: #004d40; color: white; }
+        
+        .btn-confirm { background: #27ae60; color: white; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 2px; }
+        .btn-wa { background: #25D366; color: white; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; }
+        .status-pending { color: #e67e22; font-weight: bold; }
+        .status-confirmed { color: #27ae60; font-weight: bold; }
     </style>
 </head>
 <body>
-    <a href="/staff/logout" class="logout-btn">लॉग आउट</a>
-    <a href="/" class="back-btn">⬅️ मुख्य पानावर जा</a>
-    <h2>👨‍🍳 किचन स्टाफ डॅशबोर्ड (LIVE Orders)</h2>
 
-    {% if orders %}
-        {% for o in orders %}
-        <div class="order-card">
-            <b>ऑर्डर #{{ o.id }}</b> - {{ o.name }} ({{ o.phone }})<br>
-            <small style="color: #666;">वेळ: {{ o.date }}</small>
-            <ul>
-                {% for item in o.items %}
-                <li>{{ item.name }} x {{ item.qty }}</li>
-                {% endfor %}
-            </ul>
-            <b>एकूण रक्कम: ₹{{ o.total }}</b>
+    <div class="header">
+        <h1>👨‍🍳 स्टाफ डॅशबोर्ड (ऑर्डर्स & QR कोड)</h1>
+        <a href="/staff/logout" class="logout-btn">लॉग आउट</a>
+    </div>
+
+    <!-- ग्राहकांसाठी स्कॅन कोड -->
+    <div class="card">
+        <h3>📱 ग्राहकांसाठी स्कॅन QR कोड (Scan & Order)</h3>
+        <div class="qr-box">
+            <img src="{{ qr_url }}" alt="Customer QR Code">
+            <p>हा QR कोड काऊंटरवर लावा. ग्राहक मोबाईलने स्कॅन करून स्वतःची ऑर्डर देऊ शकतात!<br><b>Link:</b> {{ store_url }}</p>
         </div>
-        {% endfor %}
-    {% else %}
-        <p style="text-align: center; color: #777;">सध्या कोणतीही नवीन ऑर्डर नाही.</p>
-    {% endif %}
+    </div>
+
+    <!-- ऑर्डर्सची यादी -->
+    <div class="card">
+        <h3>📋 सर्व ऑर्डर्स आणि पेमेंट कन्फर्मेशन</h3>
+        {% if orders %}
+        <div style="overflow-x: auto;">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>ग्राहक नाव</th>
+                    <th>मोबाईल & DOB</th>
+                    <th>आयटम्स</th>
+                    <th>एकूण ₹</th>
+                    <th>स्टेटस</th>
+                    <th>कृती (Action & WhatsApp)</th>
+                </tr>
+                {% for o in orders | reverse %}
+                <tr>
+                    <td>#{{ o.id }}</td>
+                    <td><b>{{ o.name }}</b></td>
+                    <td>{{ o.phone }}<br><small>DOB: {{ o.dob }}</small></td>
+                    <td>
+                        {% for item in o.items %}
+                        {{ item.name }} (x{{ item.qty }})<br>
+                        {% endfor %}
+                    </td>
+                    <td><b>₹{{ o.total }}</b></td>
+                    <td>
+                        {% if o.status == 'Pending' %}
+                        <span class="status-pending">पेमेंट प्रेंडिंग</span>
+                        {% else %}
+                        <span class="status-confirmed">कन्फर्म ✅</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if o.status == 'Pending' %}
+                        <a href="/staff/confirm/{{ o.id }}" class="btn-confirm">पेमेंट आले (Confirm)</a>
+                        {% endif %}
+                        <a href="{{ o.whatsapp_link }}" target="_blank" class="btn-wa">💬 WhatsApp बिल पाठवा</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <p style="font-size: 11px; color: #777; text-align: center;">सध्या कोणतीही नवीन ऑर्डर आलेली नाही.</p>
+        {% endif %}
+    </div>
+
 </body>
 </html>

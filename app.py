@@ -51,6 +51,16 @@ with app.app_context():
         admin_user = User(username='admin', password=hashed_pw, role='admin')
         db.session.add(admin_user)
         db.session.commit()
+        
+    # जर डेटाबेसमध्ये मेनू रिकामा असेल, तर आपोआप सॅम्पल कुलफी जोडल्या जातील
+    if not MenuItem.query.first():
+        sample_items = [
+            MenuItem(name='Malai Kulfi', price=50),
+            MenuItem(name='Pista Kulfi', price=60),
+            MenuItem(name='Mango Kulfi', price=70)
+        ]
+        db.session.add_all(sample_items)
+        db.session.commit()
 
 @app.route('/')
 def home():
@@ -65,7 +75,11 @@ def customer_menu():
         c_dob = request.form.get('dob')
         selected_item_id = request.form.get('item_id')
         
-        item = MenuItem.query.get(selected_item_id)
+        # सुरक्षितपणे item_id तपासा जेणेकरून क्रश होणार नाही
+        item = None
+        if selected_item_id and selected_item_id.isdigit():
+            item = MenuItem.query.get(int(selected_item_id))
+            
         if item:
             customer = Customer.query.filter_by(phone=c_phone).first()
             if not customer:
@@ -89,6 +103,8 @@ def customer_menu():
             
             flash('तुमची ऑर्डर यशस्वीरित्या नोंदवली गेली आहे!')
             return render_template('bill_success.html', bill=new_bill, whatsapp_url=whatsapp_url)
+        else:
+            flash('कृपया मेनूमधून योग्य कुलफी निवडा!')
 
     return render_template('customer_menu.html', items=items)
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>अॅडमिन लॉगिन</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50">
+    <div class="max-w-md mx-auto p-4 mt-10">
+        <div class="text-center my-6">
+            <h1 class="text-3xl font-extrabold text-amber-900">🔐 स्टाफ/अॅडमिन लॉगिन</h1>
+            <p class="text-gray-600">डॅशबोर्डमध्ये प्रवेश करण्यासाठी लॉगिन करा</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="bg-white p-6 rounded-xl shadow-md space-y-4">
+            <input type="text" name="username" placeholder="युजरनेम (Username)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500">
+            <input type="password" name="password" placeholder="पासवर्ड (Password)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500">
+            <button type="submit" class="w-full bg-amber-600 text-white font-bold p-3 rounded-xl shadow-md hover:bg-amber-700 transition">
+                लॉगिन करा
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="/order" class="text-amber-700 font-semibold underline">← मुख्य मेनूवर जा</a>
+        </div>
+    </div>
+</body>
+</html>

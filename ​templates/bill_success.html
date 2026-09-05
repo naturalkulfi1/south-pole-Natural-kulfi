@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ऑर्डर यशस्वी</title>
+    <title>Order Success - South Pole Natural Kulfi</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-amber-50">
-    <div class="max-w-md mx-auto p-4 text-center mt-10">
-        <div class="bg-white p-6 rounded-2xl shadow-xl space-y-4">
-            <div class="text-5xl">✅</div>
-            <h1 class="text-2xl font-extrabold text-amber-900">ऑर्डर यशस्वीरित्या नोंदवली!</h1>
-            <p class="text-gray-600">धन्यवाद, <strong>{{ bill.customer_name }}</strong>!</p>
-            <div class="bg-amber-50 p-4 rounded-xl text-left space-y-1">
-                <p><strong>कुल्फी:</strong> {{ bill.items_summary }}</p>
-                <p><strong>एकूण रक्कम:</strong> ₹{{ bill.total_amount }}</p>
-                <p><strong>स्टेटस:</strong> {{ bill.status }}</p>
+    <div class="max-w-md mx-auto p-4 min-h-screen flex flex-col justify-center">
+        <div class="bg-white p-6 rounded-2xl shadow-xl text-center border border-amber-200 space-y-4">
+            <div class="text-5xl">🎉</div>
+            <h1 class="text-2xl font-extrabold text-amber-900">ऑर्डर यशस्वी झाली!</h1>
+            <p class="text-gray-600 text-sm">तुमची कुल्फी तयार होत आहे.</p>
+            
+            <div class="bg-amber-50 p-4 rounded-xl text-left space-y-2 border border-amber-100">
+                <div class="flex justify-between text-sm"><span class="text-gray-600">ग्राहकाचे नाव:</span><span class="font-bold text-gray-800">{{ order.name }}</span></div>
+                <div class="flex justify-between text-sm"><span class="text-gray-600">मोबाईल नंबर:</span><span class="font-bold text-gray-800">{{ order.phone }}</span></div>
+                <div class="flex justify-between text-sm"><span class="text-gray-600">कुल्फी:</span><span class="font-bold text-gray-800">{{ order.item_name }}</span></div>
+                <div class="flex justify-between text-sm border-t pt-2"><span class="text-gray-600 font-bold">एकूण रक्कम:</span><span class="font-bold text-amber-700">₹{{ order.price }}</span></div>
             </div>
-            <a href="{{ whatsapp_url }}" target="_blank" class="block w-full bg-green-600 text-white font-bold p-3 rounded-xl shadow-lg hover:bg-green-700 transition">
-                💬 दुकानदाराला WhatsApp वर पाठवा
+
+            <div class="bg-amber-100 p-3 rounded-xl text-amber-900 font-semibold text-sm">
+                ⭐ एकूण लॉयल्टी पॉईंट्स: {{ order.points }}
+            </div>
+
+            <a href="/order" class="block w-full bg-amber-600 text-white font-bold py-3 rounded-xl shadow hover:bg-amber-700 transition text-center">
+                पुन्हा ऑर्डर करा 🍦
             </a>
-            <a href="/order" class="block text-amber-700 font-semibold underline pt-2">नवीन ऑर्डर द्या</a>
         </div>
     </div>
 </body>

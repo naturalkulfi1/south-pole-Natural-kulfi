@@ -5,37 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>South Pole Natural Kulfi</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fdfaf6; color: #5c3a21; margin: 0; padding: 10px; padding-bottom: 90px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%); color: #004d40; margin: 0; padding: 10px; padding-bottom: 90px; }
         .header { text-align: center; margin-bottom: 15px; }
-        .header h1 { color: #8b4513; font-size: 22px; margin: 5px 0; }
-        .qr-box { background: white; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .qr-box img { width: 120px; height: 120px; }
-        .form-section { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .form-section h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 15px; color: #8b4513; }
+        .header h1 { color: #006064; font-size: 23px; margin: 5px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .header p { color: #00838f; font-weight: bold; font-size: 13px; margin: 0; }
+        .qr-box { background: white; padding: 10px; border-radius: 12px; text-align: center; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
+        .qr-box img { width: 110px; height: 110px; }
+        .nav-buttons { display: flex; gap: 8px; margin-bottom: 15px; }
+        .nav-btn { flex: 1; background: white; border: 1px solid #b2ebf2; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; color: #006064; font-weight: bold; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .form-section { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border: 1px solid #b2ebf2; }
+        .form-section h3 { margin-top: 0; border-bottom: 2px solid #e0f7fa; padding-bottom: 8px; font-size: 15px; color: #006064; }
         .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: #555; }
-        .form-group input { width: 100%; padding: 9px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; background: #f9f9f9; }
-        .menu-item { background: white; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .form-group label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: bold; color: #004d40; }
+        .form-group input { width: 100%; padding: 9px; border: 1px solid #b2ebf2; border-radius: 6px; box-sizing: border-box; background: #f4fdff; }
+        .menu-item { background: white; padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e0f7fa; }
         .menu-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
         .item-details { flex: 1; }
-        .item-details h4 { margin: 0 0 4px 0; font-size: 15px; color: #5c3a21; }
-        .item-details p { margin: 0; color: #e67e22; font-weight: bold; }
-        .qty-control input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 5px; padding: 7px; font-weight: bold; }
+        .item-details h4 { margin: 0 0 4px 0; font-size: 15px; color: #004d40; }
+        .item-details p { margin: 0; color: #00838f; font-weight: bold; }
+        .qty-control input { width: 50px; text-align: center; border: 1px solid #b2ebf2; border-radius: 5px; padding: 7px; font-weight: bold; }
+        .social-footer { text-align: center; margin: 15px 0; font-size: 13px; }
+        .social-footer a { margin: 0 8px; color: #006064; text-decoration: none; font-weight: bold; }
         .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 12px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; z-index: 100; }
-        .submit-btn { background-color: #e67e22; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .submit-btn { background-color: #00838f; color: white; width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>❄️ South Pole Natural Kulfi</h1>
-        <p>स्कॅन करा आणि ऑर्डर द्या!</p>
+        <p>100% शुद्ध आणि नैसर्गिक कुल्फी - मॅकडोनाल्ड्स स्टाईल सेल्फ ऑर्डरिंग</p>
     </div>
 
-    <!-- डिझाईनमध्ये QR कोड जोडला आहे -->
     <div class="qr-box">
-        <p style="margin: 0 0 5px 0; font-size: 12px; font-weight: bold;">हा मेनू शेअर करण्यासाठी QR कोड:</p>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://your-render-app-url.onrender.com" alt="Menu QR Code">
+        <p style="margin: 0 0 5px 0; font-size: 11px; font-weight: bold; color: #006064;">हा मेनू स्कॅन करण्यासाठी QR कोड:</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://your-render-app-url.onrender.com" alt="QR Code">
+    </div>
+
+    <div class="nav-buttons">
+        <a href="/loyalty" class="nav-btn">🎁 लॉयल्टी पॉईंट्स</a>
+        <a href="/staff" class="nav-btn">👨‍🍳 स्टाफ पॅनल</a>
+        <a href="/admin" class="nav-btn" style="background-color: #e0f7fa; color: #006064;">🔒 ॲडमिन डॅशबोर्ड</a>
     </div>
 
     <form action="/place_order" method="POST">
@@ -56,28 +66,25 @@
         </div>
 
         <div class="form-section">
-            <h3>२. कुल्फी निवडा</h3>
+            <h3>२. आमचा कुल्फी मेनू</h3>
+            {% for item in items %}
             <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=100" alt="Sitafal">
+                <img src="{{ item.image }}" alt="{{ item.name }}">
                 <div class="item-details">
-                    <h4>सीताफळ कुल्फी</h4>
-                    <p>₹40</p>
+                    <h4>{{ item.name }}</h4>
+                    <p>₹{{ item.price }}</p>
                 </div>
                 <div class="qty-control">
-                    <input type="number" name="sitafal_qty" value="0" min="0">
+                    <input type="number" name="item_{{ item.id }}" value="0" min="0">
                 </div>
             </div>
-            
-            <div class="menu-item">
-                <img src="https://images.unsplash.com/photo-1553177598-fbb7a8b49704?w=100" alt="Mango">
-                <div class="item-details">
-                    <h4>मँगो कुल्फी</h4>
-                    <p>₹45</p>
-                </div>
-                <div class="qty-control">
-                    <input type="number" name="mango_qty" value="0" min="0">
-                </div>
-            </div>
+            {% endfor %}
+        </div>
+
+        <div class="social-footer">
+            <a href="{{ social.instagram }}" target="_blank">Instagram</a> | 
+            <a href="{{ social.facebook }}" target="_blank">Facebook</a> | 
+            <a href="{{ social.youtube }}" target="_blank">YouTube</a>
         </div>
 
         <div class="bottom-bar">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Final Reports & Customization</title>
+    <title>Admin Panel - Full Control</title>
     <style>
         body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
         .header { background: #c0392b; color: white; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
@@ -23,17 +23,17 @@
 </head>
 <body>
     <div class="header">
-        <h2 style="margin:0; font-size: 15px;">🔒 ॲडमिन डॅशबोर्ड (सेल्स व कस्टमायझेशन)</h2>
+        <h2 style="margin:0; font-size: 15px;">🔒 ॲडमिन डॅशबोर्ड</h2>
         <a href="/admin/logout" style="color:white; font-size:12px; text-decoration:none;">लॉग आउट</a>
     </div>
 
     <div class="card">
         <h3>📊 विक्री अहवाल (Sales Analytics)</h3>
         <div class="stats-grid">
-            <div class="stat-box"><h4>आजची विक्री (Daily)</h4><p>₹{{ daily_sales }}</p></div>
+            <div class="stat-box"><h4>आजची विक्री</h4><p>₹{{ daily_sales }}</p></div>
             <div class="stat-box"><h4>या आठवड्याची विक्री</h4><p>₹{{ weekly_sales }}</p></div>
             <div class="stat-box"><h4>या महिन्याची विक्री</h4><p>₹{{ monthly_sales }}</p></div>
-            <div class="stat-box"><h4>एकूण ऑल-टाइम विक्री</h4><p>₹{{ total_sales }}</p></div>
+            <div class="stat-box"><h4>एकूण विक्री</h4><p>₹{{ total_sales }}</p></div>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
     <div class="card">
         <h3>➕ नवीन मेनू आयटम जोडा</h3>
         <form action="/admin/add_item" method="POST">
-            <input type="text" name="name" placeholder="आयटमचे नाव (उदा. Special Kulfi)" required>
+            <input type="text" name="name" placeholder="आयटमचे नाव" required>
             <input type="number" name="price" placeholder="किंमत (₹)" required>
             <input type="text" name="category" placeholder="कॅटेगरी (Kulfi / Scoop / Shake)" required>
             <input type="text" name="image" placeholder="फोटोची लिंक (Image URL)">
@@ -62,7 +62,7 @@
     </div>
 
     <div class="card">
-        <h3>📋 सर्व मेनू आयटम्स ({{ menu|length }} आयटम्स)</h3>
+        <h3>📋 सर्व मेनू आयटम्स ({{ menu|length }})</h3>
         <table>
             <tr><th>ID</th><th>नाव</th><th>किंमत</th><th>कृती</th></tr>
             {% for item in menu %}
@@ -76,8 +76,29 @@
         </table>
     </div>
 
+    <div class="card">
+        <h3>👥 स्टाफ मॅनेजमेंट (नवीन स्टाफ जोडा)</h3>
+        <form action="/admin/add_staff" method="POST">
+            <input type="text" name="name" placeholder="स्टाफचे नाव" required>
+            <input type="text" name="username" placeholder="युजरनेम" required>
+            <input type="password" name="password" placeholder="पासवर्ड" required>
+            <input type="text" name="phone" placeholder="मोबाईल नंबर" required>
+            <button type="submit">स्टाफ जोडा</button>
+        </form>
+        <table>
+            <tr><th>नाव</th><th>युजरनेम</th><th>कृती</th></tr>
+            {% for staff in staff_list %}
+            <tr>
+                <td>{{ staff.name }}</td>
+                <td>{{ staff.username }}</td>
+                <td><a href="/admin/delete_staff/{{ staff.id }}" class="del-btn">डिलिट</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
     <div class="card" style="text-align: center;">
-        <a href="/" style="font-size:13px; color:#004d40; text-decoration:none; font-weight:bold;">⚡ मुख्य POS बिलिंग पेजवर जा</a>
+        <a href="/" style="font-size:13px; color:#004d40; text-decoration:none; font-weight:bold;">⚡ मुख्य POS पेजवर जा</a>
     </div>
 </body>
 </html>

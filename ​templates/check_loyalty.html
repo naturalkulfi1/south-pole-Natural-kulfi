@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लॉयल्टी पॉईंट्स तपासा</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50">
+    <div class="max-w-md mx-auto p-4">
+        <div class="text-center my-6">
+            <h1 class="text-3xl font-extrabold text-amber-900">⭐ लॉयल्टी पॉईंट्स</h1>
+            <p class="text-gray-600">तुमचा मोबाईल नंबर टाकून पॉईंट्स तपासा</p>
+        </div>
+
+        <form method="POST" class="bg-white p-6 rounded-xl shadow-md space-y-4">
+            <input type="text" name="phone" placeholder="मोबाईल नंबर (Phone Number)" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500">
+            <button type="submit" class="w-full bg-amber-600 text-white font-bold p-3 rounded-xl shadow-md hover:bg-amber-700 transition">
+                पॉईंट्स पहा
+            </button>
+        </form>
+
+        {% if customer %}
+        <div class="mt-6 bg-white p-6 rounded-xl shadow-md text-center space-y-2">
+            <h2 class="text-xl font-bold text-gray-800">नमस्कार, {{ customer.name }}!</h2>
+            <p class="text-gray-600">तुमचे एकूण लॉयल्टी पॉईंट्स:</p>
+            <div class="text-4xl font-extrabold text-amber-600">{{ customer.loyalty_points }} ⭐</div>
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-6">
+            <a href="/order" class="text-amber-700 font-semibold underline">← मुख्य मेनूवर जा</a>
+        </div>
+    </div>
+</body>
+</html>

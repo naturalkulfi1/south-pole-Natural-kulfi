@@ -3,93 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>South Pole Natural Kulfi - POS</title>
+    <title>South Pole POS - Petpooja Style</title>
     <style>
-        body { font-family: sans-serif; background: #f0f4f1; margin: 0; padding: 10px; color: #2c3e50; }
-        .header { background: #134f2c; color: white; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 20px; }
-        .header p { margin: 3px 0 0 0; font-size: 11px; opacity: 0.9; }
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 8px; color: #333; }
+        .header { background: #004d40; color: white; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 8px; }
+        .header h1 { margin: 0; font-size: 18px; }
+        .header p { margin: 2px 0 0 0; font-size: 11px; color: #b2ebf2; }
         
-        /* नॅव्हिगेशन आणि टॅब्स */
-        .top-nav { display: flex; gap: 5px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .nav-link { background: white; border: 1px solid #134f2c; color: #134f2c; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; white-space: nowrap; }
-        
-        .scheme-banner { background: #d4edda; color: #155724; padding: 8px; border-radius: 6px; text-align: center; font-size: 12px; font-weight: bold; margin-bottom: 10px; border: 1px solid #c3e6cb; }
+        .top-nav { display: flex; gap: 5px; margin-bottom: 8px; overflow-x: auto; }
+        .nav-link { background: white; border: 1px solid #004d40; color: #004d40; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; white-space: nowrap; }
 
-        /* आयटम ग्रिड (Petpooja Style) */
-        .section-title { font-size: 13px; font-weight: bold; color: #134f2c; margin-bottom: 6px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 300px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; }
-        .menu-card { background: #fff; border: 1px solid #c8e6c9; border-radius: 6px; padding: 8px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .menu-card:active { background: #e8f5e9; transform: scale(0.98); }
-        .menu-card h4 { margin: 4px 0; font-size: 13px; color: #134f2c; }
-        .menu-card p { margin: 0; font-size: 12px; color: #2e7d32; font-weight: bold; }
+        .banner { background: #d4edda; color: #155724; padding: 6px; border-radius: 4px; text-align: center; font-size: 11px; font-weight: bold; margin-bottom: 8px; border: 1px solid #c3e6cb; }
+
+        /* POS Grid layout */
+        .grid-title { font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 240px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
+        .menu-card { background: #fff; border: 1px solid #b2ebf2; border-radius: 5px; padding: 8px; text-align: center; cursor: pointer; user-select: none; transition: 0.1s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .menu-card:active { background: #e0f7fa; transform: scale(0.97); }
+        .menu-card h4 { margin: 2px 0; font-size: 12px; color: #006064; }
+        .menu-card p { margin: 0; font-size: 11px; color: #00838f; font-weight: bold; }
 
         /* कार्ट व फॉर्म */
-        .cart-box { background: white; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 10px; }
-        .cart-table { width: 100%; font-size: 12px; border-collapse: collapse; }
-        .cart-table th, .cart-table td { padding: 5px; text-align: left; border-bottom: 1px solid #eee; }
-        
-        .form-row { display: flex; gap: 8px; margin-top: 8px; }
+        .section-box { background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; font-size: 12px; }
+        .form-row { display: flex; gap: 6px; margin-bottom: 6px; }
         .form-group { flex: 1; }
-        .form-group label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 2px; }
-        .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 13px; }
+        .form-group label { display: block; font-size: 10px; font-weight: bold; margin-bottom: 2px; color: #004d40; }
+        .form-group input { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 12px; }
+
+        .cart-list { max-height: 120px; overflow-y: auto; border-top: 1px solid #eee; margin-top: 5px; padding-top: 5px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px; background: #f9f9f9; padding: 4px 6px; border-radius: 4px; }
         
-        .total-box { background: #e8f5e9; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 14px; display: flex; justify-content: space-between; margin-top: 8px; color: #1b5e20; }
-        .submit-btn { background: #134f2c; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .total-box { background: #e0f7fa; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 13px; display: flex; justify-content: center; margin-top: 6px; color: #006064; }
+        .submit-btn { background: #006064; color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>South Pole Natural Kulfi</h1>
-        <p>100% Natural • Fresh Fruits • Pure Ingredients</p>
+        <p>POS Billing Counter (36 Items)</p>
     </div>
 
     <div class="top-nav">
-        <a href="/" class="nav-link" style="background:#134f2c; color:white;">⚡ POS बिलिंग</a>
+        <a href="/" class="nav-link" style="background:#004d40; color:white;">⚡ POS बिलिंग</a>
         <a href="/loyalty" class="nav-link">🎁 लॉयल्टी</a>
-        <a href="/staff/login" class="nav-link">👨‍🍳 स्टाफ लॉगिन</a>
+        <a href="/staff/login" class="nav-link">👨‍🍳 स्टाफ</a>
         <a href="/admin/login" class="nav-link">🔒 ॲडमिन</a>
     </div>
 
-    <div class="scheme-banner">
-        स्कीम: प्रत्येक ८ खरेदीवर १ कुल्फी फ्री! (BOGO ऑॅक्टिव्ह)
+    <div class="banner">
+        💡 टीप: खालील आयटमवर जेवढ्या वेळा क्लिक कराल, तेवढी क्वांटिटी ऍड होईल!
     </div>
 
-    <form action="/place_order" method="POST">
-        <div class="section-title">आयटम निवडा (Click to Add / Modify Qty)</div>
+    <form action="/place_order" method="POST" id="posForm">
+        
+        <div class="grid-title">सर्व ३६ आयटम्स (Tap to Add):</div>
         <div class="menu-grid">
             {% for item in items %}
-            <div class="menu-card">
+            <div class="menu-card" onclick="incrementItem({{ item.id }}, '{{ item.name }}', {{ item.price }})">
                 <h4>{{ item.name }}</h4>
                 <p>₹{{ item.price }}</p>
-                <div style="margin-top: 5px;">
-                    <input type="number" name="item_{{ item.id }}" value="0" min="0" style="width: 45px; text-align: center; padding: 3px; font-weight: bold; border: 1px solid #134f2c; border-radius: 4px;">
-                </div>
             </div>
+            <!-- Hidden inputs to send quantities to Flask backend -->
+            <input type="hidden" id="item_qty_{{ item.id }}" name="item_{{ item.id }}" value="0">
             {% endfor %}
         </div>
 
-        <div class="cart-box">
-            <div class="section-title" style="margin-bottom: 5px;">ग्राहकाची माहिती व पेमेंट</div>
+        <div class="section-box">
+            <div class="grid-title" style="margin-bottom: 4px;">ग्राहकाची माहिती (नाव, मोबाईल, DOB)</div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>ग्राहकाचे नाव</label>
-                    <input type="text" name="customer_name" placeholder="नाव" required>
+                    <label>नाव</label>
+                    <input type="text" name="customer_name" placeholder="ग्राहकाचे नाव" required>
                 </div>
                 <div class="form-group">
                     <label>मोबाईल (WhatsApp)</label>
                     <input type="tel" name="phone" placeholder="10 अंकी नंबर" pattern="[0-9]{10}" required>
                 </div>
             </div>
-            <div class="form-group" style="margin-top: 6px;">
-                <label>ग्राहकाने दिलेले पैसे (Cash Given ₹)</label>
-                <input type="number" name="cash_given" placeholder="उदा. 500" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>वाढदिवस (Date of Birth - DOB)</label>
+                    <input type="date" name="dob" required>
+                </div>
+                <div class="form-group">
+                    <label>दिलेले पैसे (Cash Given ₹)</label>
+                    <input type="number" name="cash_given" placeholder="उदा. 500" required>
+                </div>
+            </div>
+
+            <div class="grid-title" style="margin-top: 6px;">खरेदी कार्ट (Selected Cart):</div>
+            <div class="cart-list" id="cartList">
+                <span style="color:#777; font-size: 11px;">कोणताही आयटम निवडलेला नाही.</span>
+            </div>
+
+            <div class="total-box">
+                <span>एकूण बिल (Total): ₹ <span id="grandTotal">0</span></span>
             </div>
         </div>
 
-        <button type="submit" class="submit-btn">बिल बनवा & WhatsApp पाठवा 🚀</button>
+        <button type="submit" class="submit-btn">ऑर्डर कन्फर्म करा & बिल बनवा 🚀</button>
     </form>
+
+    <script>
+        const cart = {};
+
+        function incrementItem(id, name, price) {
+            if (!cart[id]) {
+                cart[id] = { name: name, price: price, qty: 0 };
+            }
+            cart[id].qty += 1;
+            document.getElementById('item_qty_' + id).value = cart[id].qty;
+            updateCartDisplay();
+        }
+
+        function decrementItem(id) {
+            if (cart[id] && cart[id].qty > 0) {
+                cart[id].qty -= 1;
+                if (cart[id].qty === 0) {
+                    delete cart[id];
+                }
+                document.getElementById('item_qty_' + id).value = cart[id] ? cart[id].qty : 0;
+                updateCartDisplay();
+            }
+        }
+
+        function updateCartDisplay() {
+            const cartList = document.getElementById('cartList');
+            cartList.innerHTML = '';
+            let total = 0;
+            let hasItems = false;
+
+            for (let id in cart) {
+                hasItems = true;
+                let item = cart[id];
+                let itemTotal = item.price * item.qty;
+                total += itemTotal;
+
+                let div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <span><b>${item.name}</b> (₹${item.price} x ${item.qty})</span>
+                    <span>
+                        ₹${itemTotal} 
+                        <button type="button" onclick="decrementItem(${id})" style="background:#e74c3c; color:white; border:none; padding:2px 6px; border-radius:3px; margin-left:5px; cursor:pointer;">-</button>
+                    </span>
+                `;
+                cartList.appendChild(div);
+            }
+
+            if (!hasItems) {
+                cartList.innerHTML = '<span style="color:#777; font-size: 11px;">कोणताही आयटम निवडलेला नाही.</span>';
+            }
+
+            document.getElementById('grandTotal').innerText = total;
+        }
+    </script>
 
 </body>
 </html>

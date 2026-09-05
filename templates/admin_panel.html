@@ -3,71 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - South Pole POS</title>
+    <title>Admin Panel - Customization</title>
     <style>
         body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
-        .header { background: #004d40; color: white; padding: 10px; border-radius: 6px; text-align: center; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { margin: 0; font-size: 16px; }
-        .logout-btn { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; }
-        .card { background: white; padding: 10px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 10px; }
-        .card h3 { margin-top: 0; color: #004d40; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .header { background: #c0392b; color: white; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: white; padding: 12px; border-radius: 6px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        h3 { margin-top: 0; color: #c0392b; font-size: 14px; }
+        input, select { width: 100%; padding: 6px; margin: 4px 0 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 12px; }
+        button { background: #c0392b; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 5px; }
-        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; }
-        th { background: #004d40; color: white; }
-        .qr-box { text-align: center; background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px dashed #004d40; margin-bottom: 10px; }
-        .qr-box img { width: 140px; height: 140px; border: 4px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 5px; text-align: left; }
+        th { background: #c0392b; color: white; }
+        .del-btn { background: #e74c3c; color: white; padding: 3px 6px; border-radius: 3px; text-decoration: none; }
     </style>
 </head>
 <body>
-
     <div class="header">
-        <h1>🔒 ॲडमिन डॅशबोर्ड (South Pole POS)</h1>
-        <a href="/admin/logout" class="logout-btn">लॉग आउट</a>
+        <h2 style="margin:0; font-size: 15px;">🔒 ॲडमिन कस्टमायझेशन पॅनेल</h2>
+        <a href="/admin/logout" style="color:white; font-size:12px; text-decoration:none;">लॉग आउट</a>
     </div>
 
-    <!-- QR Code Display -->
     <div class="card">
-        <h3>📱 ग्राहक ऑर्डरसाठी QR कोड (Scan & Order)</h3>
-        <div class="qr-box">
-            <img src="{{ qr_url }}" alt="QR Code">
-            <p style="font-size: 11px; margin: 5px 0 0 0;">हा QR कोड स्कॅन करून ग्राहक थेट मेनूवर जाऊ शकतात.<br><b>URL:</b> {{ store_url }}</p>
-        </div>
+        <h3>🖼️ दुकान नाव आणि लोगो (Logo) बदला</h3>
+        <form action="/admin/update_config" method="POST">
+            <label style="font-size:11px; font-weight:bold;">दुकानाचे नाव:</label>
+            <input type="text" name="store_name" value="{{ config.name }}" required>
+            <label style="font-size:11px; font-weight:bold;">टॅगलाईन (Tagline):</label>
+            <input type="text" name="tagline" value="{{ config.tagline }}" required>
+            <label style="font-size:11px; font-weight:bold;">लोगो इमेज लिंक (Image URL):</label>
+            <input type="text" name="logo_url" value="{{ config.logo }}" required>
+            <button type="submit">सेटिंग अपडेट करा</button>
+        </form>
     </div>
 
-    <!-- Sales Summary Report -->
     <div class="card">
-        <h3>📊 व्यावसायिक अहवाल (Sales Summary)</h3>
-        <p>एकूण ऑर्डर्स: <b>{{ total_orders }}</b></p>
-        <hr style="border: 0; border-top: 1px dashed #ddd; margin: 8px 0;">
-        <p>📅 आजची विक्री (Daily Income): <b style="color: #2980b9;">₹{{ daily_sales }}</b></p>
-        <p>📆 या आठवड्याची विक्री (Weekly Income): <b style="color: #8e44ad;">₹{{ weekly_sales }}</b></p>
-        <p>🗓️ या महिन्याची विक्री (Monthly Income): <b style="color: #d35400;">₹{{ monthly_sales }}</b></p>
-        <p>📈 या वर्षाची विक्री (Yearly Income): <b style="color: #2c3e50;">₹{{ yearly_sales }}</b></p>
-        <p>💰 सर्वकालीन एकूण विक्री (All-Time Revenue): <b style="color: #27ae60;">₹{{ total_sales }}</b></p>
+        <h3>➕ नवीन मेनू आयटम ॲड करा</h3>
+        <form action="/admin/add_item" method="POST">
+            <input type="text" name="name" placeholder="आयटमचे नाव (उदा. Special Kulfi)" required>
+            <input type="number" name="price" placeholder="किंमत (₹)" required>
+            <input type="text" name="category" placeholder="कॅटेगरी (उदा. Kulfi / Scoop)" required>
+            <input type="text" name="image" placeholder="फोटोची लिंक (Image URL)">
+            <button type="submit">मेनूमध्ये आयटम जोडा</button>
+        </form>
     </div>
 
-    <!-- Orders List -->
     <div class="card">
-        <h3>📋 सर्व ऑर्डर्स</h3>
+        <h3>📋 सध्याचे मेनू आयटम्स (डिलिट करण्यासाठी)</h3>
         <table>
+            <tr><th>ID</th><th>नाव</th><th>किंमत</th><th>कृती</th></tr>
+            {% for item in menu %}
             <tr>
-                <th>ID</th>
-                <th>नाव</th>
-                <th>मोबाईल & DOB</th>
-                <th>एकूण ₹</th>
-                <th>स्टेटस</th>
-            </tr>
-            {% for o in orders | reverse %}
-            <tr>
-                <td>#{{ o.id }}</td>
-                <td><b>{{ o.name }}</b></td>
-                <td>{{ o.phone }}<br><small>DOB: {{ o.dob }}</small></td>
-                <td><b>₹{{ o.total }}</b></td>
-                <td>{{ o.status }}</td>
+                <td>{{ item.id }}</td>
+                <td><b>{{ item.name }}</b></td>
+                <td>₹{{ item.price }}</td>
+                <td><a href="/admin/delete_item/{{ item.id }}" class="del-btn">डिलिट</a></td>
             </tr>
             {% endfor %}
         </table>
     </div>
 
+    <div class="card">
+        <h3>💰 एकूण विक्री: ₹{{ total_sales }}</h3>
+        <a href="/" style="font-size:12px; color:#004d40; text-decoration:none; font-weight:bold;">⬅️ मुख्य POS पेजवर जा</a>
+    </div>
 </body>
 </html>

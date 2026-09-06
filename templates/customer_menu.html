@@ -14,7 +14,7 @@
         .top-nav { display: flex; gap: 5px; margin-bottom: 8px; overflow-x: auto; }
         .nav-link { background: white; border: 1px solid #004d40; color: #004d40; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 11px; font-weight: bold; white-space: nowrap; }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 290px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 270px; overflow-y: auto; background: white; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 8px; }
         .menu-card { background: #fff; border: 1px solid #b2ebf2; border-radius: 5px; padding: 6px; text-align: center; cursor: pointer; user-select: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
         .menu-card:active { background: #e0f7fa; }
         .menu-card img { width: 45px; height: 45px; object-fit: cover; border-radius: 50%; margin-bottom: 4px; border: 1px solid #004d40; }
@@ -27,10 +27,13 @@
         .form-group label { display: block; font-size: 10px; font-weight: bold; margin-bottom: 2px; color: #004d40; }
         .form-group input { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 12px; }
 
-        .cart-list { max-height: 90px; overflow-y: auto; border-top: 1px solid #eee; margin-top: 5px; padding-top: 5px; }
+        .cart-list { max-height: 80px; overflow-y: auto; border-top: 1px solid #eee; margin-top: 5px; padding-top: 5px; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 11px; background: #f9f9f9; padding: 4px 6px; border-radius: 4px; }
         .total-box { background: #e0f7fa; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 13px; display: flex; justify-content: center; margin-top: 6px; color: #006064; }
         .submit-btn { background: #006064; color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 4px; }
+
+        .social-footer { background: white; padding: 8px; border-radius: 6px; text-align: center; margin-top: 8px; font-size: 11px; border: 1px solid #ccc; }
+        .social-footer a { display: inline-block; margin: 2px 4px; color: #004d40; text-decoration: none; font-weight: bold; background: #e0f7fa; padding: 3px 6px; border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -51,7 +54,7 @@
     </div>
 
     <form action="/place_order" method="POST">
-        <div style="font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px;">सर्व ३६ आयटम्स (Tap to Add):</div>
+        <div style="font-size: 12px; font-weight: bold; color: #004d40; margin-bottom: 4px;">सर्व मेनू आयटम्स (Tap to Add):</div>
         <div class="menu-grid">
             {% for item in items %}
             <div class="menu-card" onclick="incrementItem({{ item.id }}, '{{ item.name }}', {{ item.price }})">
@@ -80,6 +83,15 @@
         </div>
         <button type="submit" class="submit-btn">ऑर्डर कन्फर्म करा & बिल बनवा 🚀</button>
     </form>
+
+    <div class="social-footer">
+        <div style="font-weight: bold; margin-bottom: 3px; color:#004d40;">आमचे सोशल मीडिया आणि चॅनेल्स:</div>
+        <a href="{{ social.instagram }}" target="_blank">📸 Instagram</a>
+        <a href="{{ social.facebook }}" target="_blank">📘 Facebook</a>
+        <a href="{{ social.youtube }}" target="_blank">▶️ YouTube</a>
+        <a href="{{ social.whatsapp_channel }}" target="_blank">📢 WhatsApp Channel</a>
+        <a href="{{ social.google_review }}" target="_blank">⭐ Google Review</a>
+    </div>
 
     <script>
         const cart = {};

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item - Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 10px; color: #333; }
+        .card { background: white; padding: 15px; border-radius: 6px; max-width: 400px; margin: 20px auto; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        h3 { margin-top: 0; color: #c0392b; font-size: 15px; }
+        input, select { width: 100%; padding: 8px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; text-align: left; }
+        label { display: block; text-align: left; font-size: 11px; font-weight: bold; color: #c0392b; }
+        button { background: #27ae60; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; font-size: 13px; }
+        .back-btn { background: #7f8c8d; margin-top: 6px; display: block; text-align: center; color: white; text-decoration: none; padding: 8px; border-radius: 4px; font-size: 13px; }
+        img { width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid #c0392b; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>✏️ मेनू आयटम, नाव, किंमत आणि फोटो एडिट करा</h3>
+        <img src="{{ item.image }}" alt="Current Item Image">
+        <form action="/admin/edit_item/{{ item.id }}" method="POST">
+            <label>आयटमचे नाव:</label>
+            <input type="text" name="name" value="{{ item.name }}" required>
+            
+            <label>किंमत (₹):</label>
+            <input type="number" name="price" value="{{ item.price }}" required>
+            
+            <label>कॅटेगरी (Kulfi / Scoop / Shake / etc):</label>
+            <input type="text" name="category" value="{{ item.category }}" required>
+            
+            <label>फोटोची लिंक (Image URL):</label>
+            <input type="text" name="image" value="{{ item.image }}" required>
+            
+            <button type="submit">बदल सेव्ह करा (Update Item)</button>
+        </form>
+        <a href="/admin" class="back-btn">मागे जा (Cancel)</a>
+    </div>
+</body>
+</html>

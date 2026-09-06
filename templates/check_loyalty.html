@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html lang="mr">
-<head><meta charset="UTF-8"><title>Loyalty Program</title></head>
-<body style="font-family:sans-serif; background:#eef2f3; padding:15px; text-align:center;">
-    <div style="background:white; max-width:320px; margin:auto; padding:15px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-        <h3 style="color:#004d40;">🎁 लॉयल्टी पॉईंट्स तपासा</h3>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loyalty Program</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f3; margin: 0; padding: 15px; text-align: center; }
+        .card { background: white; padding: 15px; border-radius: 6px; max-width: 350px; margin: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #004d40; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>🎁 लॉयल्टी पॉईंट्स तपासा</h3>
         <form method="POST">
-            <input type="tel" name="phone" placeholder="10 अंकी मोबाईल नंबर" pattern="[0-9]{10}" required style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-            <button type="submit" style="background:#004d40; color:white; border:none; padding:8px 12px; width:100%; font-weight:bold; border-radius:4px;">पॉईंट्स पहा</button>
+            <input type="tel" name="phone" placeholder="10 अंकी मोबाईल नंबर" pattern="[0-9]{10}" required>
+            <button type="submit">तपासा</button>
         </form>
         {% if user_data %}
-        <div style="margin-top:10px; background:#e0f7fa; padding:8px; border-radius:4px;">
-            <p style="margin:2px 0;">नाव: <b>{{ user_data.name }}</b></p>
-            <p style="margin:2px 0;">पॉईंट्स: <b>{{ user_data.points }}</b></p>
+        <div style="margin-top:10px; background:#e0f7fa; padding:8px; border-radius:4px; font-size:12px;">
+            <p><b>नाव:</b> {{ user_data.name }}</p>
+            <p><b>पॉईंट्स:</b> {{ user_data.points }}</p>
         </div>
         {% elif message %}
-        <p style="color:red; font-size:11px;">{{ message }}</p>
+        <p style="color:red; font-size:11px; margin-top:8px;">{{ message }}</p>
         {% endif %}
-        <p style="margin-top:10px;"><a href="/" style="font-size:11px; text-decoration:none; color:#004d40;">← होम पेजवर जा</a></p>
+        <a href="/" style="display:block; margin-top:10px; font-size:12px; color:#004d40; text-decoration:none; font-weight:bold;">⚡ मुख्य पेजवर जा</a>
     </div>
 </body>
 </html>

@@ -3,16 +3,22 @@ from datetime import datetime, timedelta
 import urllib.parse
 
 app = Flask(__name__)
-app.secret_key = 'south_pole_ultimate_final_secret_key_2026'
+app.secret_key = 'south_pole_ultimate_complete_secret_2026'
 
-# ब्रँड, टॅगलाईन आणि लोगो सेटिंग
 STORE_CONFIG = {
     "name": "South Pole Natural Kulfi",
     "tagline": "POS Counter & QR Menu with Photos",
     "logo": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
 }
 
-# सर्व ३६ आयटम्स
+SOCIAL_LINKS = {
+    "instagram": "https://instagram.com/southpolenaturalkulfi",
+    "facebook": "https://facebook.com/southpolenaturalkulfi",
+    "youtube": "https://youtube.com/@southpolenaturalkulfi",
+    "whatsapp_channel": "https://whatsapp.com/channel/your-whatsapp-channel-link",
+    "google_review": "https://g.page/r/your-google-review-link"
+}
+
 MENU_ITEMS = [
     {"id": 1, "name": "Jamun Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"},
     {"id": 2, "name": "Chocolate Kulfi", "price": 35, "category": "Kulfi", "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=150"},
@@ -60,11 +66,6 @@ ADMIN_PASSWORD = "admin123"
 ORDERS = []
 LOYALTY_DB = {}
 
-SOCIAL_LINKS = {
-    "instagram": "https://instagram.com/southpolenaturalkulfi",
-    "facebook": "https://facebook.com/southpolenaturalkulfi"
-}
-
 @app.route('/')
 def customer_portal():
     return render_template('customer_menu.html', items=MENU_ITEMS, config=STORE_CONFIG, social=SOCIAL_LINKS)
@@ -99,7 +100,25 @@ def place_order():
     order_id = len(ORDERS) + 1
     items_text = "\n".join([f"- {i['name']} x {i['qty']} = ₹{i['total']}" for i in ordered_items])
     
-    whatsapp_msg = f"""🍦 *{STORE_CONFIG['name']}* 🍦\nनमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏\n\n🧾 *ऑर्डर बिल (Order ID: #{order_id})*\n{items_text}\n\n💰 *एकूण रक्कम:* ₹{total_amount}\n💵 *दिलेले पैसे:* ₹{cash_given}\n🔄 *परत दिले:* ₹{return_change}\n\nपुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
+    whatsapp_msg = f"""🍦 *{STORE_CONFIG['name']}* 🍦
+नमस्ते *{name}*, आपली ऑर्डर कन्फर्म झाली आहे! 🙏
+
+🧾 *ऑर्डर बिल (Order ID: #{order_id})*
+{items_text}
+
+💰 *एकूण रक्कम:* ₹{total_amount}
+💵 *दिलेले पैसे:* ₹{cash_given}
+🔄 *परत दिले:* ₹{return_change}
+
+---
+🌟 आमचे सोशल मीडिया आणि चॅनेल्स फॉलो करा:
+📸 Instagram: {SOCIAL_LINKS['instagram']}
+📘 Facebook: {SOCIAL_LINKS['facebook']}
+▶️ YouTube: {SOCIAL_LINKS['youtube']}
+📢 WhatsApp Channel: {SOCIAL_LINKS['whatsapp_channel']}
+⭐ Google Review: {SOCIAL_LINKS['google_review']}
+
+पुन्हा भेट दिल्याबद्दल धन्यवाद! 🙏"""
     
     encoded_msg = urllib.parse.quote(whatsapp_msg)
     whatsapp_link = f"https://wa.me/91{phone}?text={encoded_msg}"
@@ -139,7 +158,8 @@ def admin_panel():
     return render_template('admin_panel.html', 
                            orders=ORDERS, total_sales=total_sales, total_orders=total_orders,
                            daily_sales=daily_sales, weekly_sales=weekly_sales, monthly_sales=monthly_sales,
-                           menu=MENU_ITEMS, staff_list=STAFF_LIST, config=STORE_CONFIG, loyalty_users=LOYALTY_DB)
+                           menu=MENU_ITEMS, staff_list=STAFF_LIST, config=STORE_CONFIG, 
+                           social=SOCIAL_LINKS, loyalty_users=LOYALTY_DB)
 
 @app.route('/admin/update_config', methods=['POST'])
 def admin_update_config():
@@ -147,6 +167,12 @@ def admin_update_config():
     STORE_CONFIG['name'] = request.form.get('store_name')
     STORE_CONFIG['tagline'] = request.form.get('tagline')
     STORE_CONFIG['logo'] = request.form.get('logo_url')
+    
+    SOCIAL_LINKS['instagram'] = request.form.get('instagram')
+    SOCIAL_LINKS['facebook'] = request.form.get('facebook')
+    SOCIAL_LINKS['youtube'] = request.form.get('youtube')
+    SOCIAL_LINKS['whatsapp_channel'] = request.form.get('whatsapp_channel')
+    SOCIAL_LINKS['google_review'] = request.form.get('google_review')
     return redirect(url_for('admin_panel'))
 
 @app.route('/admin/add_item', methods=['POST'])
@@ -161,6 +187,21 @@ def admin_add_item():
         "image": request.form.get('image') or "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=150"
     })
     return redirect(url_for('admin_panel'))
+
+@app.route('/admin/edit_item/<int:item_id>', methods=['GET', 'POST'])
+def admin_edit_item(item_id):
+    if not session.get('admin_logged'): return redirect(url_for('admin_login'))
+    item = next((i for i in MENU_ITEMS if i['id'] == item_id), None)
+    if not item: return redirect(url_for('admin_panel'))
+    
+    if request.method == 'POST':
+        item['name'] = request.form.get('name')
+        item['price'] = float(request.form.get('price', 0))
+        item['category'] = request.form.get('category')
+        item['image'] = request.form.get('image') or item['image']
+        return redirect(url_for('admin_panel'))
+        
+    return render_template('admin_edit_item.html', item=item, config=STORE_CONFIG, social=SOCIAL_LINKS)
 
 @app.route('/admin/delete_item/<int:item_id>')
 def admin_delete_item(item_id):
@@ -201,7 +242,7 @@ def check_loyalty():
         phone = request.form.get('phone')
         if phone in LOYALTY_DB: user_data = LOYALTY_DB[phone]
         else: message = "हा नंबर लॉयल्टी प्रोग्राममध्ये सापडला नाही."
-    return render_template('check_loyalty.html', user_data=user_data, message=message, config=STORE_CONFIG)
+    return render_template('check_loyalty.html', user_data=user_data, message=message, config=STORE_CONFIG, social=SOCIAL_LINKS)
 
 @app.route('/staff/login', methods=['GET', 'POST'])
 def staff_login():

@@ -14,7 +14,8 @@
         table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 5px; }
         th, td { border: 1px solid #ddd; padding: 5px; text-align: left; }
         th { background: #c0392b; color: white; }
-        .del-btn { background: #e74c3c; color: white; padding: 3px 6px; border-radius: 3px; text-decoration: none; }
+        .edit-btn { background: #2980b9; color: white; padding: 3px 6px; border-radius: 3px; text-decoration: none; margin-right: 3px; display: inline-block; }
+        .del-btn { background: #e74c3c; color: white; padding: 3px 6px; border-radius: 3px; text-decoration: none; display: inline-block; }
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 8px; }
         .stat-box { background: #f9f9f9; padding: 8px; border-radius: 5px; border-left: 3px solid #c0392b; }
         .stat-box h4 { margin: 0; font-size: 11px; color: #555; }
@@ -38,7 +39,7 @@
     </div>
 
     <div class="card">
-        <h3>🖼️ दुकान नाव, टॅगलाईन आणि लोगो (Logo) बदला</h3>
+        <h3>🌐 दुकान ब्रँड, लोगो आणि सोशल लिंक्स (Insta, FB, YouTube, WhatsApp, Google Review)</h3>
         <form action="/admin/update_config" method="POST">
             <label style="font-size:11px; font-weight:bold;">दुकानाचे नाव:</label>
             <input type="text" name="store_name" value="{{ config.name }}" required>
@@ -46,7 +47,19 @@
             <input type="text" name="tagline" value="{{ config.tagline }}" required>
             <label style="font-size:11px; font-weight:bold;">लोगो इमेज लिंक (Image URL):</label>
             <input type="text" name="logo_url" value="{{ config.logo }}" required>
-            <button type="submit">सेटिंग अपडेट करा</button>
+            
+            <label style="font-size:11px; font-weight:bold;">Instagram Link:</label>
+            <input type="text" name="instagram" value="{{ social.instagram }}">
+            <label style="font-size:11px; font-weight:bold;">Facebook Link:</label>
+            <input type="text" name="facebook" value="{{ social.facebook }}">
+            <label style="font-size:11px; font-weight:bold;">YouTube Link:</label>
+            <input type="text" name="youtube" value="{{ social.youtube }}">
+            <label style="font-size:11px; font-weight:bold;">WhatsApp Channel Link:</label>
+            <input type="text" name="whatsapp_channel" value="{{ social.whatsapp_channel }}">
+            <label style="font-size:11px; font-weight:bold;">Google Review Link:</label>
+            <input type="text" name="google_review" value="{{ social.google_review }}">
+
+            <button type="submit">सर्व सेटिंग अपडेट करा</button>
         </form>
     </div>
 
@@ -62,18 +75,23 @@
     </div>
 
     <div class="card">
-        <h3>📋 सर्व मेनू आयटम्स ({{ menu|length }})</h3>
-        <table>
-            <tr><th>ID</th><th>नाव</th><th>किंमत</th><th>कृती</th></tr>
-            {% for item in menu %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td><b>{{ item.name }}</b></td>
-                <td>₹{{ item.price }}</td>
-                <td><a href="/admin/delete_item/{{ item.id }}" class="del-btn">डिलिट</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        <h3>📋 सर्व मेनू आयटम्स ({{ menu|length }}) - फोटो, नाव, किंमत बदला</h3>
+        <div style="max-height: 250px; overflow-y: auto;">
+            <table>
+                <tr><th>ID</th><th>नाव</th><th>किंमत</th><th>कृती (Edit/Delete)</th></tr>
+                {% for item in menu %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><b>{{ item.name }}</b></td>
+                    <td>₹{{ item.price }}</td>
+                    <td>
+                        <a href="/admin/edit_item/{{ item.id }}" class="edit-btn">एडिट</a>
+                        <a href="/admin/delete_item/{{ item.id }}" class="del-btn">डिलिट</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
     <div class="card">
